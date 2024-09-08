@@ -1,0 +1,33 @@
+---
+title: "Quiz 2"
+author: "Hooman Sabarou"
+format: html
+editor: visual
+---
+
+Paper: *Making Sense of Model Generalizability: A Tutorial on Cross-Validation in R and Shiny"* by Song et al. (2021)
+
+It provides an overview of model generalizability, focusing on how statistical models, often overfit to sample data, tend to perform poorly on new data. The tutorial introduces cross-validation as a method to assess generalizability and reduce overfitting. It demonstrates two common cross-validation techniques, k-fold and Monte Carlo cross-validation, using R and the caret package. The paper also offers a hands-on example via a Shiny app, showing how model complexity, sample size, and effect size influence generalizability.
+
+Song QC, Tang C, Wee S. Making Sense of Model Generalizability: A Tutorial on Cross-Validation in R and Shiny. *Advances in Methods and Practices in Psychological Science*. 2021;4(1). doi:[10.1177/2515245920947067](https://doi.org/10.1177/2515245920947067)
+
+Paper: Monte Carlo Cross Validation" by Qing-Song Xu and et al. (2001)
+
+It explains a better way to pick the right number of components for multivariate calibration models, especially in Partial Least Squares Regression (PLSR) and Principal Components Regression (PCR). Typical methods, like leave-one-out cross-validation, often overfit the model by including too many components, which hurts its ability to predict new data. The Monte Carlo cross-validation (MCCV) method avoids this by randomly splitting the data into calibration and validation sets multiple times, making it less likely to overfit. In their simulations and real-world examples, they show that MCCV is much more likely to pick the correct number of components than other methods, especially when you leave out a good portion of the data for validation.
+
+Qing-Song Xu, Yi-Zeng Liang, Monte Carlo cross validation, Chemometrics and Intelligent Laboratory Systems, Volume 56, Issue 1, 2001, Pages 1-11, ISSN 0169-7439, <https://doi.org/10.1016/S0169-7439(00)00122-2.>
+
+Paper: **Cross-validation of component models: A critical look at current methods, R. Bro and et al. (2008)**
+
+I read a paper on cross-validation techniques for component models, particularly focusing on principal component analysis (PCA). It explores how cross-validation methods help determine the right number of components in a model to avoid overfitting while improving prediction accuracy. The paper points out issues with current methods and introduces alternative techniques like the improved Wold and Eastment–Krzanowski (EK) procedures. These methods aim to resolve overfitting and bias that occur when the model used to predict data isn't independent of the data left out during validation. The study shows that the Eigenvector and EM methods perform better, especially for smaller datasets, and that the selection of the number of components is crucial in cross-validation. Overall, the paper highlights the importance of selecting the right cross-validation method depending on the dataset's size and complexity.
+
+Bro, R., Kjeldahl, K., Smilde, A.K. *et al.* Cross-validation of component models: A critical look at current methods. *Anal Bioanal Chem* **390**, 1241–1251 (2008). https://doi.org/10.1007/s00216-007-1790-1
+
+```{r}
+
+```
+
+```{r}
+#| echo: false
+#2 * 2
+```
