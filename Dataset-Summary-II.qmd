@@ -1,6 +1,6 @@
 ---
 title: "Datasets Summaries"
-author: "Hooman Sabarou & Mounika Chevva "
+author: "Hooman Sabarou & Mounika Chevva"
 format: html
 editor: visual
 ---
