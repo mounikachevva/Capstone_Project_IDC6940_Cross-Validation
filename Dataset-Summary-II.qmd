@@ -41,7 +41,7 @@ Here’s a brief summary of the dataset:
 
 This dataset can be used for modeling and prediction purposes, specifically to predict the martensite start temperature (Ms) based on the steel's chemical composition. It has no missing data.
 
-## Car Dataset
+## Car Dataset Summary
 
 There are nine columns and 301 entries in the car dataset. The following are the columns:
 
