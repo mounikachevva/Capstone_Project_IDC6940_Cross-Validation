@@ -1,6 +1,6 @@
 ---
 title: "Datasets Summaries"
-author: "Hooman Sabarou & Mounika Chevva"
+author: "Hooman Sabarou & Mounika Chevva "
 format: html
 editor: visual
 ---
@@ -45,18 +45,16 @@ This dataset can be used for modeling and prediction purposes, specifically to p
 
 There are nine columns and 301 entries in the car dataset. The following are the columns:
 
-1. Car_Name: The car's name (in a category).
-2. Year: Manufacture year (integer).
-3. Selling Price: The amount being offered for the car (float).
-4. Present_Price: The car's current retail price (float).
-5. Kms_Driven: The automobile's total mileage (integer).
-6. Fuel_Type: The kind of fuel the vehicle runs on (categorical: gasoline/diesel).
-7. Seller_Type: The type of seller (dealer/individual, category).
-8. Transmission: Transmission type (manual or automatic, respectively).
-9. Owner: The integer number of prior owners.
+1.  Car_Name: The car's name (in a category).
+2.  Year: Manufacture year (integer).
+3.  Selling Price: The amount being offered for the car (float).
+4.  Present_Price: The car's current retail price (float).
+5.  Kms_Driven: The automobile's total mileage (integer).
+6.  Fuel_Type: The kind of fuel the vehicle runs on (categorical: gasoline/diesel).
+7.  Seller_Type: The type of seller (dealer/individual, category).
+8.  Transmission: Transmission type (manual or automatic, respectively).
+9.  Owner: The integer number of prior owners.
 
 The dataset is perfect for applications involving regression or classification because it contains both numerical and categorical data, with no missing values.
 
-**Data Exploration** :
-Exploration involves utilizing value_counts() to examine class distributions for categorical characteristics and reviewing summary statistics using describe() to comprehend data distributions. .corr() is used to analyze correlations between numerical information such as
-Selling_Price and Present_Price. Histograms and scatter plots are a few examples of visualizations that can be used to find patterns, correlations, and outliers in data, which can aid with subsequent analysis and model creation.
+**Data Exploration** : Exploration involves utilizing value_counts() to examine class distributions for categorical characteristics and reviewing summary statistics using describe() to comprehend data distributions. .corr() is used to analyze correlations between numerical information such as Selling_Price and Present_Price. Histograms and scatter plots are a few examples of visualizations that can be used to find patterns, correlations, and outliers in data, which can aid with subsequent analysis and model creation.
