@@ -1,0 +1,120 @@
+---
+title: "Spotify-EV-HS"
+format: html
+editor: visual
+---
+
+```{r}
+
+library(readr)
+library(classpackage)
+library(ggplot2)
+library(purrr)
+library(tidyr)
+library(dplyr)
+
+
+spotify_data <- read_csv("/Users/hoomansabarou/Github/Capstone_Project_Rstudio/Choosing Dataset/Spotify/Spotify Track Dataset.csv")
+
+head(spotify_data)
+
+```
+
+```{r}
+
+spotify_data <- read_csv("/Users/hoomansabarou/Github/Capstone_Project_Rstudio/Choosing Dataset/Spotify/Spotify Track Dataset.csv", show_col_types = FALSE)
+
+
+spotify_data <- spotify_data[ , -1]
+
+
+str(spotify_data)
+
+
+```
+
+```{r}
+# Check for missing values across the dataset
+colSums(is.na(spotify_data))
+
+```
+
+```{r}
+
+spotify_data_clean <- spotify_data %>%
+  drop_na(artists, album_name, track_name)
+
+
+str(spotify_data_clean)
+
+```
+
+```{r}
+
+
+ggplot(spotify_data_clean, aes(x = popularity)) + 
+  geom_histogram(binwidth = 1, fill = "skyblue", color = "black") + 
+  ggtitle("Distribution of Popularity")
+
+ggplot(spotify_data_clean, aes(x = danceability)) + 
+  geom_histogram(binwidth = 0.05, fill = "skyblue", color = "black") + 
+  ggtitle("Distribution of Danceability")
+
+ggplot(spotify_data_clean, aes(x = energy)) + 
+  geom_histogram(binwidth = 0.05, fill = "skyblue", color = "black") + 
+  ggtitle("Distribution of Energy")
+
+ggplot(spotify_data_clean, aes(x = loudness)) + 
+  geom_histogram(binwidth = 1, fill = "skyblue", color = "black") + 
+  ggtitle("Distribution of Loudness")
+
+ggplot(spotify_data_clean, aes(x = tempo)) + 
+  geom_histogram(binwidth = 5, fill = "skyblue", color = "black") + 
+  ggtitle("Distribution of Tempo")
+
+```
+
+```{r}
+
+# Remove rows where popularity is zero
+spotify_data_clean <- spotify_data_clean %>%
+  filter(popularity > 0)
+
+str(spotify_data_clean)
+
+nrow(spotify_data_clean)
+
+```
+
+```{r}
+# Plot distributions for the relevant features
+ggplot(spotify_data_clean, aes(x = popularity)) + 
+  geom_histogram(binwidth = 1, fill = "skyblue", color = "black") + 
+  ggtitle("Distribution of Popularity")
+```
+
+```{r}
+# Apply square root transformation to Energy (since it's positive)
+spotify_data_clean$energy_sqrt <- sqrt(spotify_data_clean$energy)
+
+# Check the distribution of transformed Energy
+ggplot(spotify_data_clean, aes(x = energy_sqrt)) + 
+  geom_histogram(binwidth = 0.05, fill = "skyblue", color = "black") + 
+  ggtitle("Distribution of Square Root Transformed Energy")
+
+```
+
+```{r}
+# Min-Max scaling for Loudness
+min_loudness <- min(spotify_data_clean$loudness)
+max_loudness <- max(spotify_data_clean$loudness)
+
+# Apply the transformation
+spotify_data_clean$loudness_scaled <- (spotify_data_clean$loudness - min_loudness) / (max_loudness - min_loudness)
+
+# Check the distribution of scaled Loudness
+ggplot(spotify_data_clean, aes(x = loudness_scaled)) + 
+  geom_histogram(binwidth = 0.05, fill = "skyblue", color = "black") + 
+  ggtitle("Distribution of Scaled Loudness")
+
+```
