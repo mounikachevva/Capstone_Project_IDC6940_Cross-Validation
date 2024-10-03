@@ -21,40 +21,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -103,10 +69,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<section id="the-head-of-the-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="the-head-of-the-dataset">The head of the dataset</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the dataset</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>dataset <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"/Users/hoomansabarou/Downloads/Martensite Start-Temp.csv"</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dataset)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     C   Mn   Si   Cr   Ni   Mo    V Co   Al W   Cu Nb Ti B     N     Ms
 1 0.19 1.25 0.23 0.07 0.66 0.54 0.00  0 0.00 0 0.00  0  0 0 0.000 645.00
@@ -117,16 +82,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 6 0.38 0.69 0.20 0.95 1.58 0.26 0.00  0 0.00 0 0.00  0  0 0 0.000 589.75</code></pre>
 </div>
 </div>
+</section>
+<section id="checking-for-missing-values" class="level3">
+<h3 class="anchored" data-anchor-id="checking-for-missing-values">Checking for missing values</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for missing values</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(dataset))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0</code></pre>
 </div>
 </div>
+</section>
+<section id="checking-the-structure-of-the-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="checking-the-structure-of-the-dataset">Checking the structure of the dataset</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the structure of the dataset</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(dataset)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>'data.frame':   1543 obs. of  16 variables:
  $ C : num  0.19 1 0.26 0.06 1.2 0.38 0.43 0.004 0 2 ...
@@ -147,9 +114,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  $ Ms: num  645 359 653 721 323 ...</code></pre>
 </div>
 </div>
+</section>
+<section id="summary-statistics-of-the-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="summary-statistics-of-the-dataset">Summary statistics of the dataset</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary statistics of the dataset</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(dataset)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       C                Mn                Si               Cr        
  Min.   :0.0000   Min.   : 0.0000   Min.   :0.0000   Min.   : 0.000  
@@ -181,10 +149,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  Max.   :2.524640   Max.   :4.000e-03   Max.   :2.65000   Max.   :788.1  </code></pre>
 </div>
 </div>
+</section>
+<section id="correlation-between-variables" class="level3">
+<h3 class="anchored" data-anchor-id="correlation-between-variables">Correlation between variables</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Correlation between variables</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>cor_matrix <span class="ot">&lt;-</span> <span class="fu">cor</span>(dataset)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>cor_matrix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>             C          Mn           Si           Cr          Ni          Mo
 C   1.00000000 -0.05917062  0.076600512  0.133051621 -0.34769552  0.11463635
@@ -239,9 +207,10 @@ N  -0.007578545 -0.005993731  1.000000000 -0.14695161
 Ms -0.083678655 -0.020090832 -0.146951608  1.00000000</code></pre>
 </div>
 </div>
+</section>
+<section id="scatter-plot-for-one-element-and-martensite-starting-temperature" class="level3">
+<h3 class="anchored" data-anchor-id="scatter-plot-for-one-element-and-martensite-starting-temperature">Scatter plot for one element and Martensite starting temperature</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatter plot for one element vs Ms</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dataset<span class="sc">$</span>C, dataset<span class="sc">$</span>Ms, <span class="at">xlab =</span> <span class="st">"C"</span>, <span class="at">ylab =</span> <span class="st">"Martensite Start Temp"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -250,14 +219,10 @@ Ms -0.083678655 -0.020090832 -0.146951608  1.00000000</code></pre>
 </div>
 </div>
 </div>
+</section>
+<section id="histogram-of-martensite-starting-temperature" class="level3">
+<h3 class="anchored" data-anchor-id="histogram-of-martensite-starting-temperature">Histogram of Martensite starting temperature</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot histogram of Ms (Martensite start temperature)</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(dataset<span class="sc">$</span>Ms, </span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Distribution of Martensite Start Temperature (Ms)"</span>, </span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Martensite Start Temperature (Ms)"</span>, </span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">"lightblue"</span>, </span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">border =</span> <span class="st">"black"</span>, </span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">breaks =</span> <span class="dv">30</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -266,16 +231,13 @@ Ms -0.083678655 -0.020090832 -0.146951608  1.00000000</code></pre>
 </div>
 </div>
 </div>
+</section>
+<section id="filtering-the-dataset-for-temperatures-between-300-to-800-degree-celcius" class="level3">
+<h3 class="anchored" data-anchor-id="filtering-the-dataset-for-temperatures-between-300-to-800-degree-celcius">Filtering the dataset for temperatures between 300 to 800 degree Celcius</h3>
+</section>
+<section id="building-glm-models" class="level3">
+<h3 class="anchored" data-anchor-id="building-glm-models">Building GLM models</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter the dataset for Ms between 300°C and 800°C</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>filtered_dataset <span class="ot">&lt;-</span> <span class="fu">subset</span>(dataset, Ms <span class="sc">&gt;=</span> <span class="dv">300</span> <span class="sc">&amp;</span> Ms <span class="sc">&lt;=</span> <span class="dv">800</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Build the updated GLM model using filtered data</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>updated_model <span class="ot">&lt;-</span> <span class="fu">glm</span>(Ms <span class="sc">~</span> C <span class="sc">+</span> Ni <span class="sc">+</span> Mn <span class="sc">+</span> Mo <span class="sc">+</span> Si <span class="sc">+</span> Cr <span class="sc">+</span> V <span class="sc">+</span> Co, <span class="at">data =</span> filtered_dataset, <span class="at">family =</span> gaussian)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize the updated model</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(updated_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -305,10 +267,10 @@ AIC: 15699
 Number of Fisher Scoring iterations: 2</code></pre>
 </div>
 </div>
+</section>
+<section id="checking-residuals" class="level3">
+<h3 class="anchored" data-anchor-id="checking-residuals">Checking residuals</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check residuals with a QQ plot</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(<span class="fu">residuals</span>(updated_model))</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(<span class="fu">residuals</span>(updated_model), <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -316,8 +278,6 @@ Number of Fisher Scoring iterations: 2</code></pre>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram of residuals</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">residuals</span>(updated_model), <span class="at">main =</span> <span class="st">"Residuals Distribution"</span>, <span class="at">xlab =</span> <span class="st">"Residuals"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -326,10 +286,10 @@ Number of Fisher Scoring iterations: 2</code></pre>
 </div>
 </div>
 </div>
+</section>
+<section id="identifying-outliers" class="level3">
+<h3 class="anchored" data-anchor-id="identifying-outliers">Identifying outliers</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify outliers</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>outlier_residuals <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">abs</span>(<span class="fu">residuals</span>(updated_model)) <span class="sc">&gt;</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">sd</span>(<span class="fu">residuals</span>(updated_model)))</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>dataset[outlier_residuals, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         C   Mn      Si       Cr       Ni      Mo     V   Co    Al   W   Cu Nb
 9    0.000 0.00 0.00000  0.53096 30.96549 0.00000 0.000 0.00 0.000 0.0 0.00  0
@@ -431,15 +391,10 @@ Number of Fisher Scoring iterations: 2</code></pre>
 1492 0.000 0 0.000 473.0000</code></pre>
 </div>
 </div>
+</section>
+<section id="remove-rows-where-carbon-content-is-zero-update-the-model-and-the-summary-of-the-model." class="level3">
+<h3 class="anchored" data-anchor-id="remove-rows-where-carbon-content-is-zero-update-the-model-and-the-summary-of-the-model.">Remove rows where Carbon content is zero, update the model, and the summary of the model.</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove rows where C is 0</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>filtered_dataset_no_C0 <span class="ot">&lt;-</span> <span class="fu">subset</span>(filtered_dataset, C <span class="sc">!=</span> <span class="dv">0</span>)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Build the updated GLM model using the filtered data</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>updated_model_no_C0 <span class="ot">&lt;-</span> <span class="fu">glm</span>(Ms <span class="sc">~</span> C <span class="sc">+</span> Ni <span class="sc">+</span> Mn <span class="sc">+</span> Mo <span class="sc">+</span> Si <span class="sc">+</span> Cr <span class="sc">+</span> V <span class="sc">+</span> Co, <span class="at">data =</span> filtered_dataset_no_C0, <span class="at">family =</span> gaussian)</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize the updated model</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(updated_model_no_C0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -469,13 +424,10 @@ AIC: 15010
 Number of Fisher Scoring iterations: 2</code></pre>
 </div>
 </div>
+</section>
+<section id="updating-the-model-by-removing-mo-and-co-and-adding-an-interaction-parameter-between-carbon-and-manganese." class="level3">
+<h3 class="anchored" data-anchor-id="updating-the-model-by-removing-mo-and-co-and-adding-an-interaction-parameter-between-carbon-and-manganese.">Updating the model by removing Mo and Co and adding an interaction parameter between Carbon and Manganese.</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Update the GLM model by removing Co and Mo, and adding an interaction between C and Mn</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>updated_model_interaction <span class="ot">&lt;-</span> <span class="fu">glm</span>(Ms <span class="sc">~</span> C <span class="sc">*</span> Mn <span class="sc">+</span> Ni <span class="sc">+</span> Si <span class="sc">+</span> Cr <span class="sc">+</span> V, </span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">data =</span> filtered_dataset_no_C0, <span class="at">family =</span> gaussian)</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize the updated model</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(updated_model_interaction)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -504,14 +456,10 @@ AIC: 14984
 Number of Fisher Scoring iterations: 2</code></pre>
 </div>
 </div>
+</section>
+<section id="update-the-model-by-removing-v-and-add-an-interaction-parameter-between-carbon-and-nickel." class="level3">
+<h3 class="anchored" data-anchor-id="update-the-model-by-removing-v-and-add-an-interaction-parameter-between-carbon-and-nickel.">Update the model by removing V and add an interaction parameter between Carbon and Nickel.</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Update the model: remove V, and add interaction between C and Ni</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>updated_model_C_Ni_interaction <span class="ot">&lt;-</span> <span class="fu">glm</span>(Ms <span class="sc">~</span> C <span class="sc">*</span> Mn <span class="sc">+</span> C <span class="sc">*</span> Ni <span class="sc">+</span> Si <span class="sc">+</span> Cr, </span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">data =</span> filtered_dataset_no_C0, </span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">family =</span> gaussian)</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize the updated model</span></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(updated_model_C_Ni_interaction)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -540,8 +488,10 @@ AIC: 14935
 Number of Fisher Scoring iterations: 2</code></pre>
 </div>
 </div>
+</section>
+<section id="performing-anova-for-the-updated-model." class="level3">
+<h3 class="anchored" data-anchor-id="performing-anova-for-the-updated-model.">Performing ANOVA for the updated model.</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(classpackage)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: ggplot2</code></pre>
 </div>
@@ -571,8 +521,6 @@ Attaching package: 'dplyr'</code></pre>
 
     intersect, setdiff, setequal, union</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform ANOVA on the updated model</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">anova_check</span>(updated_model_C_Ni_interaction)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -582,14 +530,14 @@ Attaching package: 'dplyr'</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glmtoolbox)</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>(<span class="fu">adjR2</span>(updated_model_C_Ni_interaction))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.7969</code></pre>
 </div>
 </div>
+</section>
+<section id="checking-leverage-and-influential-points." class="level3">
+<h3 class="anchored" data-anchor-id="checking-leverage-and-influential-points.">Checking leverage and influential points.</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cooks</span>(updated_model_C_Ni_interaction)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -598,10 +546,10 @@ Attaching package: 'dplyr'</code></pre>
 </div>
 </div>
 </div>
+</section>
+<section id="investigate-the-influential-points" class="level3">
+<h3 class="anchored" data-anchor-id="investigate-the-influential-points">Investigate the influential points</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Investigate the influential points</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>influential_points <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1081</span>, <span class="dv">685</span>, <span class="dv">686</span>)</span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>filtered_dataset_no_C0[influential_points, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         C    Mn   Si    Cr   Ni   Mo    V Co Al W   Cu Nb Ti B     N     Ms
 1145 0.022 10.24 0.00  8.19 0.00 0.00 0.00  0  0 0 0.00  0  0 0 0.206 327.15
@@ -609,17 +557,10 @@ Attaching package: 'dplyr'</code></pre>
 719  2.080  0.39 0.28 11.48 0.31 0.02 0.04  0  0 0 0.15  0  0 0 0.000 457.00</code></pre>
 </div>
 </div>
+</section>
+<section id="remove-influential-points" class="level3">
+<h3 class="anchored" data-anchor-id="remove-influential-points">Remove influential points</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove the influential points</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>filtered_dataset_no_influential <span class="ot">&lt;-</span> filtered_dataset_no_C0[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1081</span>, <span class="dv">685</span>, <span class="dv">686</span>), ]</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Rebuild the model after removing the influential points</span></span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>updated_model_no_influential <span class="ot">&lt;-</span> <span class="fu">glm</span>(Ms <span class="sc">~</span> C <span class="sc">*</span> Mn <span class="sc">+</span> C <span class="sc">*</span> Ni <span class="sc">+</span> Si <span class="sc">+</span> Cr, </span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">data =</span> filtered_dataset_no_influential, </span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">family =</span> gaussian)</span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize the updated model</span></span>
-<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(updated_model_no_influential)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -648,10 +589,10 @@ AIC: 14751
 Number of Fisher Scoring iterations: 2</code></pre>
 </div>
 </div>
+</section>
+<section id="investigate-points-found-out-by-cooks-distances" class="level3">
+<h3 class="anchored" data-anchor-id="investigate-points-found-out-by-cooks-distances">Investigate points found out by Cook’s distances</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Investigate the observations with moderate Cook's Distance</span></span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>moderate_influential_points <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1132</span>, <span class="dv">1188</span>, <span class="dv">1061</span>)</span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>filtered_dataset_no_C0[moderate_influential_points, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        C   Mn   Si    Cr   Ni   Mo    V Co Al    W   Cu Nb Ti B N  Ms
 1199 1.36 1.84 1.14  0.15 1.81 1.41 0.00  0  0 0.00 0.00  0  0 0 0 439
@@ -659,27 +600,23 @@ Number of Fisher Scoring iterations: 2</code></pre>
 1122 1.56 0.37 0.20 12.46 0.26 0.54 0.65  0  0 0.28 0.10  0  0 0 0 458</code></pre>
 </div>
 </div>
+</section>
+<section id="apply-the-residuals-check-to-the-filtered-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="apply-the-residuals-check-to-the-filtered-dataset">Apply the residuals check to the filtered dataset</h3>
+</section>
+<section id="counting-outliers" class="level3">
+<h3 class="anchored" data-anchor-id="counting-outliers">Counting outliers</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply the residuals check to the correct dataset (filtered_dataset_no_influential)</span></span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>filtered_dataset_no_influential <span class="ot">&lt;-</span> filtered_dataset_no_influential <span class="sc">%&gt;%</span> </span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">outlier =</span> <span class="fu">if_else</span>(<span class="fu">abs</span>(<span class="fu">rstandard</span>(updated_model_no_influential)) <span class="sc">&gt;</span> <span class="fl">2.5</span>, </span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"Suspected"</span>, <span class="st">"Not Suspected"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>filtered_dataset_no_influential <span class="sc">%&gt;%</span> <span class="fu">count</span>(outlier)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        outlier    n
 1 Not Suspected 1429
 2     Suspected   25</code></pre>
 </div>
 </div>
+</section>
+<section id="plotting-carbon-content-with-martensite-starting-temprature" class="level3">
+<h3 class="anchored" data-anchor-id="plotting-carbon-content-with-martensite-starting-temprature">Plotting Carbon content with Martensite starting temprature</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>filtered_dataset_no_influential <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> C, <span class="at">y =</span> Ms, <span class="at">color =</span> outlier)) <span class="sc">+</span></span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#999999"</span>, <span class="st">"#000000"</span>)) <span class="sc">+</span></span>
-<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Carbon"</span>, <span class="at">y =</span> <span class="st">"Martensite Starting Temperature"</span>, <span class="at">color =</span> <span class="st">"Outlier"</span>) <span class="sc">+</span></span>
-<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -689,7 +626,6 @@ Number of Fisher Scoring iterations: 2</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova_check</span>(updated_model_no_influential)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -698,9 +634,10 @@ Number of Fisher Scoring iterations: 2</code></pre>
 </div>
 </div>
 </div>
+</section>
+<section id="check-multicollinearity" class="level3">
+<h3 class="anchored" data-anchor-id="check-multicollinearity">Check Multicollinearity</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Check Multicollinearity</span></span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>car<span class="sc">::</span><span class="fu">vif</span>(updated_model_no_influential)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>there are higher-order terms (interactions) in this model
 consider setting type = 'predictor'; see ?vif</code></pre>
@@ -710,15 +647,10 @@ consider setting type = 'predictor'; see ?vif</code></pre>
 2.392626 2.309298 1.417059 1.067519 1.073750 2.869351 1.194094 </code></pre>
 </div>
 </div>
+</section>
+<section id="remove-identified-outliers" class="level3">
+<h3 class="anchored" data-anchor-id="remove-identified-outliers">Remove identified outliers</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Removing identified outliers</span></span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>filtered_dataset_no_influential_no_outlier <span class="ot">&lt;-</span> filtered_dataset_no_influential <span class="sc">%&gt;%</span> <span class="fu">filter</span>(outlier <span class="sc">==</span> <span class="st">"Not Suspected"</span>)</span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>updated_model_no_influential_2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(Ms <span class="sc">~</span> C <span class="sc">*</span> Mn <span class="sc">+</span> C <span class="sc">*</span> Ni <span class="sc">+</span> Si <span class="sc">+</span> Cr, </span>
-<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">data =</span> filtered_dataset_no_influential_no_outlier, </span>
-<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">family =</span> gaussian)</span>
-<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(updated_model_no_influential_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -748,7 +680,6 @@ Number of Fisher Scoring iterations: 2</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova_check</span>(updated_model_no_influential_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -758,7 +689,6 @@ Number of Fisher Scoring iterations: 2</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cooks</span>(updated_model_no_influential_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -767,6 +697,9 @@ Number of Fisher Scoring iterations: 2</code></pre>
 </div>
 </div>
 </div>
+</section>
+<section id="table-1" class="level3">
+<h3 class="anchored" data-anchor-id="table-1">Table 1</h3>
 <style type="text/css">
 .tg  {border-collapse:collapse;border-spacing:0;}
 .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
@@ -853,9 +786,7 @@ Number of Fisher Scoring iterations: 2</code></pre>
 </tr>
 </tbody>
 </table>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">summary</span>(filtered_dataset_no_influential_no_outlier[<span class="fu">c</span>(<span class="st">"Ms"</span>, <span class="st">"C"</span>, <span class="st">"Mn"</span>, <span class="st">"Ni"</span>, <span class="st">"Si"</span>, <span class="st">"Cr"</span>)]), <span class="st">"NewTable.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+</section>
 
 </main>
 <!-- /main column -->

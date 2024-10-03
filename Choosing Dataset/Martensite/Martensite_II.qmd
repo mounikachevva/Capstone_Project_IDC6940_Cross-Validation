@@ -3,7 +3,11 @@ title: "Martensite Starting Temperature"
 author: "Hooman Sabarou & Mounika Chevva-Cross_Validation Group_Fall 2024"
 editor: visual
 format: html
+self-constrainded: true
+echo: FALSE
 ---
+
+### The head of the dataset
 
 ```{r}
 # Load the dataset
@@ -12,11 +16,15 @@ head(dataset)
 
 ```
 
+### Checking for missing values
+
 ```{r}
 # Check for missing values
 sum(is.na(dataset))
 
 ```
+
+### Checking the structure of the dataset
 
 ```{r}
 # Check the structure of the dataset
@@ -24,11 +32,15 @@ str(dataset)
 
 ```
 
+### Summary statistics of the dataset
+
 ```{r}
 # Summary statistics of the dataset
 summary(dataset)
 
 ```
+
+### Correlation between variables
 
 ```{r}
 # Correlation between variables
@@ -37,11 +49,15 @@ cor_matrix
 
 ```
 
+### Scatter plot for one element and Martensite starting temperature
+
 ```{r}
 # Scatter plot for one element vs Ms
 plot(dataset$C, dataset$Ms, xlab = "C", ylab = "Martensite Start Temp")
 
 ```
+
+### Histogram of Martensite starting temperature
 
 ```{r}
 # Plot histogram of Ms (Martensite start temperature)
@@ -54,11 +70,15 @@ hist(dataset$Ms,
 
 ```
 
+### Filtering the dataset for temperatures between 300 to 800 degree Celcius
+
 ```{r}
 # Filter the dataset for Ms between 300°C and 800°C
 filtered_dataset <- subset(dataset, Ms >= 300 & Ms <= 800)
 
 ```
+
+### Building GLM models
 
 ```{r}
 # Build the updated GLM model using filtered data
@@ -68,6 +88,8 @@ updated_model <- glm(Ms ~ C + Ni + Mn + Mo + Si + Cr + V + Co, data = filtered_d
 summary(updated_model)
 
 ```
+
+### Checking residuals
 
 ```{r}
 # Check residuals with a QQ plot
@@ -80,12 +102,16 @@ hist(residuals(updated_model), main = "Residuals Distribution", xlab = "Residual
 
 ```
 
+### Identifying outliers
+
 ```{r}
 # Identify outliers
 outlier_residuals <- which(abs(residuals(updated_model)) > 2 * sd(residuals(updated_model)))
 dataset[outlier_residuals, ]
 
 ```
+
+### Remove rows where Carbon content is zero, update the model, and the summary of the model. 
 
 ```{r}
 # Remove rows where C is 0
@@ -99,6 +125,8 @@ summary(updated_model_no_C0)
 
 ```
 
+### Updating the model by removing Mo and Co and adding an interaction parameter between Carbon and Manganese.
+
 ```{r}
 # Update the GLM model by removing Co and Mo, and adding an interaction between C and Mn
 updated_model_interaction <- glm(Ms ~ C * Mn + Ni + Si + Cr + V, 
@@ -108,6 +136,8 @@ updated_model_interaction <- glm(Ms ~ C * Mn + Ni + Si + Cr + V,
 summary(updated_model_interaction)
 
 ```
+
+### Update the model by removing V and add an interaction parameter between Carbon and Nickel. 
 
 ```{r}
 # Update the model: remove V, and add interaction between C and Ni
@@ -119,6 +149,8 @@ updated_model_C_Ni_interaction <- glm(Ms ~ C * Mn + C * Ni + Si + Cr,
 summary(updated_model_C_Ni_interaction)
 
 ```
+
+### Performing ANOVA for the updated model. 
 
 ```{r}
 library(classpackage)
@@ -132,9 +164,13 @@ library(glmtoolbox)
 (adjR2(updated_model_C_Ni_interaction))
 ```
 
+### Checking leverage and influential points.
+
 ```{r}
 cooks(updated_model_C_Ni_interaction)
 ```
+
+### Investigate the influential points
 
 ```{r}
 # Investigate the influential points
@@ -143,6 +179,8 @@ filtered_dataset_no_C0[influential_points, ]
 
 
 ```
+
+### Remove influential points
 
 ```{r}
 # Remove the influential points
@@ -158,12 +196,16 @@ summary(updated_model_no_influential)
 
 ```
 
+### Investigate points found out by Cook's distances
+
 ```{r}
 # Investigate the observations with moderate Cook's Distance
 moderate_influential_points <- c(1132, 1188, 1061)
 filtered_dataset_no_C0[moderate_influential_points, ]
 
 ```
+
+### Apply the residuals check to the filtered dataset
 
 ```{r}
 # Apply the residuals check to the correct dataset (filtered_dataset_no_influential)
@@ -173,10 +215,14 @@ filtered_dataset_no_influential <- filtered_dataset_no_influential %>%
 
 ```
 
+### Counting outliers
+
 ```{r}
 
 filtered_dataset_no_influential %>% count(outlier)
 ```
+
+### Plotting Carbon content with Martensite starting temprature
 
 ```{r}
 library(ggplot2)
@@ -192,11 +238,15 @@ anova_check(updated_model_no_influential)
 
 ```
 
+### Check Multicollinearity
+
 ```{r}
 #Check Multicollinearity
 car::vif(updated_model_no_influential)
 
 ```
+
+### Remove identified outliers
 
 ```{r}
 #Removing identified outliers
@@ -218,6 +268,8 @@ anova_check(updated_model_no_influential_2)
 cooks(updated_model_no_influential_2)
 ```
 
+### Table 1
+
 ```{=html}
 <style type="text/css">
 .tg  {border-collapse:collapse;border-spacing:0;}
@@ -229,7 +281,7 @@ cooks(updated_model_no_influential_2)
 </style>
 ```
 |     |       Ms      |       C        |       Mn       |       Ni       |       Si       |       Cr       |
-|----------|----------|----------|----------|----------|----------|----------|
+|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
 |     | Min.   :310.0 | Min.   :0.0016 | Min.   :0.0000 | Min.   : 0.000 | Min.   :0.0000 | Min.   : 0.000 |
 |     | 1st Qu.:553.5 | 1st Qu.:0.1600 | 1st Qu.:0.4700 | 1st Qu.: 0.000 | 1st Qu.:0.2000 | 1st Qu.: 0.000 |
 |     | Median :605.0 | Median :0.3300 | Median :0.6900 | Median : 0.150 | Median :0.2600 | Median : 0.520 |
