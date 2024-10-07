@@ -1,6 +1,6 @@
 ---
 title: "Martensite Starting Temperature"
-author: "Hooman Sabarou & Mounika Chevva-Cross_Validation Group_Fall 2024"
+author: "Hooman Sabarou-Cross_Validation Group_Fall 2024"
 editor: visual
 format: html
 self-constrainded: true
