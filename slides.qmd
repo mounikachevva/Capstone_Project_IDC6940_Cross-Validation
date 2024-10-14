@@ -1,0 +1,127 @@
+---
+title: "Literature Review"
+subtitle: "Hooman Sabarou & Mounika"
+author: "Cross-Validation"
+execute:
+  echo: true
+  warning: false
+  message: false
+  error: false
+format: 
+  revealjs:
+    theme: sky
+    embed-resources: true
+    slide-number: false
+    width: 1600
+    height: 900
+    df-print: paged
+    html-math-method: katex
+   
+editor: source
+pdf-separate-fragments: true
+fig-align: center
+---
+
+
+## Introduction  {.smaller}
+
+- **Challenges in Cross-Validation:** Traditional methods like k-fold and leave-one-out cross-validation face limitations like overfitting, variance, and inefficiency in large datasets. 
+- **Innovative Solutions:** New techniques such as Cross-Validation Voting (CVV), Monte Carlo cross-validation (MCCV), and improved methods for selecting the right number of components (Wold, EK procedures) enhance model generalization, reduce overfitting, and improve error rate estimation.
+- **Performance and Efficiency:** Leveraging advanced methods like Parallel-CV and GPU-based parallelization, as well as alternative cross-validation approaches in multivariate models, significantly boosts efficiency and accuracy, especially for large or small datasets.
+
+
+## Literature Review by Mounika {.smaller}
+
+- Cross Validation Voting for Improving CNN Classification in Grocery Products
+- CNN models face challenges like overfitting and generalization issues in supermarket product classification.
+- Ensemble learning strategies such as voting, boosting, and bagging are commonly used to improve performance but often rely on single classifiers or validation sets.
+- The Cross-Validation Voting (CVV) method proposed by Duque Domingo et al. improves generalization and reduces overfitting, outperforming traditional methods in grocery classification.
+
+- Yates et al. emphasize cross-validation as an essential technique for model selection in ecological research, especially when likelihoods or parameters are difficult to estimate.
+-  They highlight the importance of using leave-one-out cross-validation or bias-corrected k-fold cross-validation when k < 10 to address overfitting and bias issues.
+- The modified one-standard-error criterion is recommended for calibrated selection, with the review offering guidelines for hypothesis testing and prediction in ecological research.
+
+- Qi, Diao, and Qiu review the use of cross-validation (CV) techniques like k-fold CV and leave-one-out CV (LOO) in feature selection and model evaluation.
+- LOO provides nearly unbiased error estimates but suffers from high variance in small datasets, while 10-fold CV is shown to reliably select the correct decision tree.
+- Despite the value of CV in model evaluation, the authors highlight a flaw in applying CV to feature selection, especially in hybrid models, and their study contrasts various CV techniques to address this issue.
+
+## Literature Review by Mounika {.smaller}
+
+- Li Lingqiao et al. highlight the high computational cost of traditional cross-validation techniques, especially with large datasets, and the inefficiencies of existing parallel computing frameworks like LIBSVM.
+- Multi-core programming models such as MPI, OpenMP, and Pthread offer powerful solutions but are too complex for common use due to the need for manual data synchronization and thread management.
+- The authors propose Parallel-CV, a multi-threaded framework with a user-friendly API, which simplifies parallelizing cross-validation methods, improving computational efficiency and scalability for large datasets.
+
+
+- Yang et al. identified the challenge of determining the appropriate number of cross-validation repetitions for gene expression data classification, noting that arbitrary repetition counts can affect the accuracy of error rate estimation.
+- They introduced two techniques, Fixed Confidence Interval (FCI) and Two Step Estimation (TSE), which automatically calculate the necessary repetitions by using confidence intervals to estimate error rates with precision.
+- Experimental results demonstrated that FCI and TSE produce more accurate and reliable estimates than traditional empirical methods, reducing unnecessary computations and improving error rate estimation for gene expression classification.
+
+- Li et al. proposed using GPUs to parallelize Support Vector Machine (SVM) training, significantly speeding up the process.
+- Gonzalez et al. demonstrated the efficiency of combining MPI with OpenMP to parallelize Artificial Neural Network (ANN) training on time-series data, while Sinkovits achieved a 168x speedup using OpenMP for a time-series classification algorithm.
+- These studies highlight the benefits of parallel processing in reducing neural network cross-validation execution time and improving time-series analysis efficiency.
+
+```{r, warning=FALSE, echo=F, message=FALSE}
+# loading packages 
+#library(tidyverse)
+#library(knitr)
+#library(ggthemes)
+#library(ggrepel)
+#library(dslabs)
+```
+
+```{r, warning=FALSE, echo=F}
+# Load Data
+#kable(head(murders))
+
+#ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total)) 
+
+  #ggplot1 + geom_point(aes(col=region), size = 4) +
+ # geom_text_repel(aes(label=abb)) +
+  #scale_x_log10() +
+ #scale_y_log10() +
+  #geom_smooth(formula = "y~x", method=lm,se = F)+
+ # xlab("Populations in millions (log10 scale)") + 
+  #ylab("Total number of murders (log10 scale)") +
+  #ggtitle("US Gun Murders in 2010") +
+  #scale_color_discrete(name = "Region")+
+   #   theme_bw()
+  
+
+```
+
+## Literature Review by Hooman {.smaller}
+
+- Overview of Cross-Validation Methods: The paper covers data splitting techniques, including single hold-out, k-fold, and leave-one-out cross-validation.
+- Pros and Cons: Each method's advantages and limitations are discussed in relation to dataset size and complexity.
+- Key Concepts: The paper addresses overfitting, stratification, and how to select the final model based on cross-validation results.
+
+- Application in Materials Science: The paper focuses on predicting the Martensite Start Temperature in steel using chemistry data, which can be influenced by minor changes in composition and processing.
+- Neural Network Model: The model utilizes a neural network and is validated using the 5-fold cross-validation method, showing significant improvement over previous models.
+- Overfitting Concerns: Despite improvements, cross-validation metrics (MSE and RMSE) indicate potential overfitting, with increased errors when tested on unseen data.
+
+
+## Literature Review by Hooman {.smaller}
+
+
+- Focus on Model Generalizability: The paper highlights the issue of overfitting in statistical models and their poor performance on new data.
+- Cross-Validation Techniques: It introduces k-fold and Monte Carlo cross-validation as methods to assess and improve generalizability, with practical implementation in R using the caret package.
+- Interactive Example: A hands-on Shiny app example illustrates how factors like model complexity, sample size, and effect size impact generalizability.
+
+
+- Component Selection in Multivariate Models: The paper focuses on improving the selection of components in Partial Least Squares Regression (PLSR) and Principal Components Regression (PCR).
+- Limitations of Traditional Methods: Common methods like leave-one-out cross-validation often lead to overfitting by selecting too many components, reducing predictive accuracy for new data.
+- Monte Carlo Cross-Validation (MCCV): MCCV, by repeatedly splitting the data into calibration and validation sets, better identifies the correct number of components and avoids overfitting, as demonstrated through simulations and real-world examples.
+
+
+- Cross-Validation in PCA: The paper examines how cross-validation techniques help select the correct number of components in principal component analysis (PCA) to avoid overfitting and improve prediction accuracy.
+- Alternative Methods: It introduces the improved Wold and Eastment–Krzanowski (EK) procedures to address overfitting and bias in component models.
+- Performance of Methods: The study finds that the Eigenvector and EM methods outperform others, particularly for smaller datasets, emphasizing the importance of choosing the right cross-validation method based on dataset size and complexity.
+
+
+## Conclusion & Future Work
+
+- In summary, cross-validation techniques are essential for improving model generalization and reducing overfitting, but traditional methods often struggle with limitations such as high variance and inefficiency. New approaches like CVV, MCCV, and improved component selection methods provide more reliable results, especially for complex datasets. By incorporating parallel processing and advanced techniques, these methods greatly enhance the accuracy and efficiency of model validation across various fields.
+
+- **Dateset Selection**
+
+

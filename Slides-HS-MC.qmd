@@ -56,6 +56,26 @@ fig-align: center
 - Alternative Methods: It introduces the improved Wold and Eastment–Krzanowski (EK) procedures to address overfitting and bias in component models.
 - Performance of Methods: The study finds that the Eigenvector and EM methods outperform others, particularly for smaller datasets, emphasizing the importance of choosing the right cross-validation method based on dataset size and complexity.
 
+## Methodology {.smaller}
+
+- Initial Data Exploration (Filtering & Removal)
+  
+- ### **Modeling Approach**:
+- Untransformed Model: Directly modeled Ms using predictors like C, Mn, Ni, Si, Cr, with interaction terms. 
+- Log-Transformed Model: Modeled log(Ms) to handle non-normality and stabilize variance, using the same predictors and interaction terms.
+
+- Model Improvements (Predictors' Removal, Introducting Interaction Parameters, Outliers' Removal)
+
+- Model Diagnostics (ANOVA, AIC, Cross-Validation, Check for Multicollinearity, Influential Points' Removal)
+
+- Model Evaluation:
+The log-transformed model showed significantly better performance with a lower AIC and cross-validation MSE.
+Residual deviance and cross-validation confirmed that the log model generalized better to unseen data.
+- Programing has been done by R [@R] in Rstudio (version 2024.04.2) 
+- Utilized packages: tidyverse [@tidyverse], classpackage [@classpackage], 
+ggplot2 [@gg], psych [@psych], and boot [@boot1,@boot2]
+
+
 
 ## Conclusion & Future Work
 
