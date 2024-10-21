@@ -1,75 +1,101 @@
 ---
-title: "Bayes Class"
+title: "Methodology"
+author: "Hooman Sabarou"
 format: html
 editor: visual
+date: Oct-20-2024
 ---
 
-## Quarto
+## Methodology
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+In this section, the method to evaluate the dataset (Martensite) and choose the final models are explained. To have a strong model, some background knowledge in materials science has been applied.
 
-## Running Code
+## Martensite Dataset
 
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+The initial Martensite dataset has 1543 observations with 16 variables. The dataset collects Martensite starting temperatures for different steels, based on their compositions. Those 16 variables represent 16 different chemical elements. The dependent variable is Ms (Martesnite Starting Temperature).
 
-```{r}
+#### Filtering the Dataset
 
-library(ggplot2)
+After evaluating the dataset, it has been observed that the most of the data for MS has been collected between 300 to 800C as they are only few datapoints between 150 to 300C. This structure of the dataset makes it difficult to model correlations between Ms and its predictors. Indeed, few points between 150 to 300C can act as extreme values and outliers, leading to inaccurate coefficients and distorted relationships between predictors and the response variable (Ms). Also, keeping extreme values in the dataset could have led to non-normally distributed residuals and poor model fits. Accordingly, the initial dataset has been filtered to only focus on the central range of Ms values (300 to 800C).
 
+In addition to limiting the range of Ms, another modification has been applied to the dataset before modeling. It has been revealed that the dataset has some values of Ms while their corresponding Carbon contents are zero. As there is no steel without Carbon, cells with zero Carbon have no sense. These cells have been deleted from the dataset.
 
-binom_pmf <- function(n, pi) {
-  y_vals <- 0:n
-  pmf <- dbinom(y_vals, size = n, prob = pi)
-  data.frame(y = y_vals, pmf = pmf)
-}
+After conducting these two modifications into the initial dataset, the modeling has been started based on GLM models.
 
+## Models
 
-n <- 6
-pi_values <- c(0.2, 0.5, 0.8)
-y_highlight <- 1  
+Initial choice of predictor variables has been done based on previous knowledge in materials science. No interaction parameter has been considered in initial models. The model starts with a linear model as it follows:
 
+$Ms = C + Ni + Mn + Mo + Si + Cr + V + Co$
 
-plot_data <- do.call(rbind, lapply(pi_values, function(pi) {
-  df <- binom_pmf(n, pi)
-  df$pi <- pi
-  return(df)
-}))
+The significance of predictor variables has been firstly evaluated by p-value as p-value \< 0.05 indicates a predictor is statistically significant. In this step, Vanadium (V) and Cobalt (Co) have been removed from the model. They also showed multicollinearity, which made it difficult to interpret the model later. Removing V and Co could reduce AIC for the model.
 
+The improvement in models has been evaluated by monitoring residual deviances and AICs. Moreover, residual vs. fitted plot and Q-Q plots of residuals have been evaluated for models.
 
-ggplot(plot_data, aes(x = factor(y), y = pmf, group = pi)) +
-  geom_bar(stat = "identity", fill = "gray", color = "black") +
-  facet_wrap(~pi, labeller = label_bquote(pi == .(pi))) +
-  geom_bar(data = subset(plot_data, y == y_highlight), 
-           aes(x = factor(y), y = pmf), 
-           stat = "identity", fill = "black", color = "black") +
-  labs(x = "Y (Number of Wins)", y = expression(f(y | pi)), 
-       title = "Conditional pmf of Bin(6, pi) for different values of pi") +
-  theme_minimal()
+For further improvement, interaction parameters have been introduced for the most important predictors. Accordingly, in addition to C, Mn, and Ni as individual predictors, the interaction parameters of C-Mn and C-Ni have been added to the model.
 
-```
+Leverage and influential datapoints have been evaluated by Cook's distance. In this regard, three influential datapoints have been investigated: data point #1145, 718, and 719. It is revealed that these points represent extreme content of either Carbon or Manganese. They have been removed from the dataset, and model has been updated. This step has caused a great improvement in the models.
 
-You can add options to executable code like this
+Further improvement has been achieved by considering a log model. Accordingly, two different models have been developed to capture correlations between Ms and chemical elements. As it mentioned earlier, the first model is a linear model (untransformed model), and the second model is a log-transformed model. In the former, the dependent variable is Ms. In the later, the dependent variable is log (Ms). The final models have been presented as follows after checking multicollinearity among predictor variables for each model.
 
-```{r}
-# Define the likelihood function
-likelihood <- function(pi) {
-  6 * pi * (1 - pi)^5
-}
+### Linear Model (untransformed model)
 
-# Generate a sequence of possible values for pi between 0 and 1
-pi_vals <- seq(0, 1, by = 0.01)
+The dependent variable is the **Martensite Starting Temperature (Ms)**, and It is directly modeled without any transformations. This model assumes a **linear relationship** between the chemical elements (such as **C**, **Mn**, **Ni**, **Si**, **Cr**) and **Ms**.
 
-# Calculate the likelihood for each value of pi
-likelihood_vals <- sapply(pi_vals, likelihood)
+$Ms = 769.41 -286.71 C -16.42 Mn -14.04 Ni - 13.89 Si - 10.13Cr -41.45C:Mn - 8.36 C:Ni$
 
-# Plot the likelihood function
-library(ggplot2)
-df <- data.frame(pi = pi_vals, likelihood = likelihood_vals)
-ggplot(df, aes(x = pi, y = likelihood)) +
-  geom_line(color = "blue") +
-  labs(title = "Likelihood of Kasparov Winning 1 Game as a Function of π",
-       x = "π (Kasparov's Probability of Winning a Game)", 
-       y = "Likelihood") +
-  theme_minimal()
+As it can be see, the model has composed of two interaction parameters between Carbon and Manganese and Carbon and Nickle.
 
-```
+The interpretation of the linear model can be done as follows:
+
+-   The coefficients represent the direct change in the Martensite start temperature (**Ms**) for a one-unit change in the predictor variable, holding all other variables constant.
+
+-   For example, a coefficient of **-286.71** for **C** means that for every 1% increase in carbon, **Ms** decreases by 286.71°C.
+
+-   **Interaction Terms**: The interaction between **C** and **Mn** indicates that the effect of **C** on **Ms** depends on the level of **Mn** and vice versa.
+
+### Log Model (transformed model)
+
+In this model, the dependent variable is **log(Ms)**. The log transformation is applied to stabilize variance and address potential skewness in the response variable. The model assumes a **linear relationship** between the predictors and the log-transformed response.
+
+$log(Ms) = -6.69 - 0.51C - 0.03 Mn - 0.03 Ni - 0.03 Si - 0.02Cr - 0.07 C:Mn - 0.01C:Ni$
+
+The interpretation of the log model can be done as follows:
+
+-   In the log-transformed model, the coefficients represent the **percentage change** in **Ms** for a one-unit change in the predictor. Since the dependent variable is on a logarithmic scale, the coefficients can be interpreted as follows:
+
+    -   A coefficient of **-0.51** for **C** means that for a 1% increase in carbon, **Ms** decreases by about **40%** (since $e^{0.51} = 0.60$).
+
+-   **Interaction Terms**: The interaction terms in this model indicate how the combination of variables affects the percentage change in **Ms**.
+
+### Choosing Between Models
+
+Cross-validation has been performed for each model based on k-fold (5-fold) method. The results have been considered to choose the best model.
+
+-   **Untransformed Model**: This model was chosen to first understand the **direct linear relationship** between the chemical elements and **Ms**. It allows for easy interpretation and insight into how each chemical composition influences the Martensite start temperature.
+
+-   **Log-Transformed Model**: This model was chosen because it addressed several issues observed in the untransformed model:
+
+    -   **Non-normality of residuals**: Residuals in the untransformed model were not normally distributed, violating a key assumption of linear regression.
+
+    -   **Heteroscedasticity**: The untransformed model showed non-constant variance in the residuals. The log transformation stabilized this.
+
+    -   The log model provided a better fit based on residual deviance and cross-validation error.
+
+### The Best Model
+
+Based on the cross-validation results and model diagnostics (such as residual deviance, AIC, and MSE), the **log-transformed model** is the best-performing model.
+
+-   **Log Model's AIC**: **-4756.5**, which is significantly lower than the untransformed model's AIC of **13545**.
+
+-   **Residual Deviance**: The log-transformed model's residual deviance is much lower, showing a better fit to the data.
+
+-   **Cross-validation MSE**: The log-transformed model had a much lower MSE (around **0.0021**) compared to the untransformed model (around **774**), indicating better generalization performance.
+
+-   **Stabilization of variance**: The log transformation handled issues like heteroscedasticity and non-normality of residuals, making it more reliable.
+
+### **Cross-Validation Refinement**:
+
+-   **K-Fold Cross-Validation with More Folds**: increasing the number of folds (e.g., 10-fold) may provide a more robust estimate of the model’s generalization performance.
+
+-   **Leave-One-Out Cross-Validation (LOOCV)**: A more granular approach to cross-validation that can further help us validate the model's performance.
