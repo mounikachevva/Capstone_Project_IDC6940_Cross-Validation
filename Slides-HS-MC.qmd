@@ -71,6 +71,9 @@ fig-align: center
 - Model Evaluation:
 The log-transformed model showed significantly better performance with a lower AIC and cross-validation MSE.
 Residual deviance and cross-validation confirmed that the log model generalized better to unseen data.
+- Cross-Validation Refinement:
+  + K-Fold Cross-Validation with More Folds
+  + Leave-One-Out Cross-Validation (LOOCV) 
 - Programing has been done by R [@R] in Rstudio (version 2024.04.2) 
 - Utilized packages: tidyverse [@tidyverse], classpackage [@classpackage], 
 ggplot2 [@gg], psych [@psych], and boot [@boot1,@boot2]
