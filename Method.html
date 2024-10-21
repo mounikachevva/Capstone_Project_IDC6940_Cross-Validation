@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Hooman Sabarou">
-<meta name="dcterms.date" content="2024-10-20">
 
-<title>Methodology</title>
+<title>Bayes Class</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -36,35 +68,6 @@ ul.task-list li input[type="checkbox"] {
 <link href="Method_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="Method_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
@@ -76,26 +79,14 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Methodology</h1>
+<h1 class="title">Bayes Class</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Hooman Sabarou </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">October 20, 2024</p>
-    </div>
-  </div>
   
     
   </div>
@@ -105,84 +96,83 @@ window.Quarto = {
 </header>
 
 
-<section id="methodology" class="level2">
-<h2 class="anchored" data-anchor-id="methodology">Methodology</h2>
-<p>In this section, the method to evaluate the dataset (Martensite) and choose the final models are explained. To have a strong model, some background knowledge in materials science has been applied.</p>
+<section id="quarto" class="level2">
+<h2 class="anchored" data-anchor-id="quarto">Quarto</h2>
+<p>Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <a href="https://quarto.org" class="uri">https://quarto.org</a>.</p>
 </section>
-<section id="martensite-dataset" class="level2">
-<h2 class="anchored" data-anchor-id="martensite-dataset">Martensite Dataset</h2>
-<p>The initial Martensite dataset has 1543 observations with 16 variables. The dataset collects Martensite starting temperatures for different steels, based on their compositions. Those 16 variables represent 16 different chemical elements. The dependent variable is Ms (Martesnite Starting Temperature).</p>
-<section id="filtering-the-dataset" class="level4">
-<h4 class="anchored" data-anchor-id="filtering-the-dataset">Filtering the Dataset</h4>
-<p>After evaluating the dataset, it has been observed that the most of the data for MS has been collected between 300 to 800C as they are only few datapoints between 150 to 300C. This structure of the dataset makes it difficult to model correlations between Ms and its predictors. Indeed, few points between 150 to 300C can act as extreme values and outliers, leading to inaccurate coefficients and distorted relationships between predictors and the response variable (Ms). Also, keeping extreme values in the dataset could have led to non-normally distributed residuals and poor model fits. Accordingly, the initial dataset has been filtered to only focus on the central range of Ms values (300 to 800C).</p>
-<p>In addition to limiting the range of Ms, another modification has been applied to the dataset before modeling. It has been revealed that the dataset has some values of Ms while their corresponding Carbon contents are zero. As there is no steel without Carbon, cells with zero Carbon have no sense. These cells have been deleted from the dataset.</p>
-<p>After conducting these two modifications into the initial dataset, the modeling has been started based on GLM models.</p>
-</section>
-</section>
-<section id="models" class="level2">
-<h2 class="anchored" data-anchor-id="models">Models</h2>
-<p>Initial choice of predictor variables has been done based on previous knowledge in materials science. No interaction parameter has been considered in initial models. The model starts with a linear model as it follows:</p>
-<p><span class="math inline">\(Ms = C + Ni + Mn + Mo + Si + Cr + V + Co\)</span></p>
-<p>The significance of predictor variables has been firstly evaluated by p-value as p-value &lt; 0.05 indicates a predictor is statistically significant. In this step, Vanadium (V) and Cobalt (Co) have been removed from the model. They also showed multicollinearity, which made it difficult to interpret the model later. Removing V and Co could reduce AIC for the model.</p>
-<p>The improvement in models has been evaluated by monitoring residual deviances and AICs. Moreover, residual vs.&nbsp;fitted plot and Q-Q plots of residuals have been evaluated for models.</p>
-<p>For further improvement, interaction parameters have been introduced for the most important predictors. Accordingly, in addition to C, Mn, and Ni as individual predictors, the interaction parameters of C-Mn and C-Ni have been added to the model.</p>
-<p>Leverage and influential datapoints have been evaluated by Cook’s distance. In this regard, three influential datapoints have been investigated: data point #1145, 718, and 719. It is revealed that these points represent extreme content of either Carbon or Manganese. They have been removed from the dataset, and model has been updated. This step has caused a great improvement in the models.</p>
-<p>Further improvement has been achieved by considering a log model. Accordingly, two different models have been developed to capture correlations between Ms and chemical elements. As it mentioned earlier, the first model is a linear model (untransformed model), and the second model is a log-transformed model. In the former, the dependent variable is Ms.&nbsp;In the later, the dependent variable is log (Ms). The final models have been presented as follows after checking multicollinearity among predictor variables for each model.</p>
-<section id="linear-model-untransformed-model" class="level3">
-<h3 class="anchored" data-anchor-id="linear-model-untransformed-model">Linear Model (untransformed model)</h3>
-<p>The dependent variable is the <strong>Martensite Starting Temperature (Ms)</strong>, and It is directly modeled without any transformations. This model assumes a&nbsp;<strong>linear relationship</strong>&nbsp;between the chemical elements (such as&nbsp;<strong>C</strong>,&nbsp;<strong>Mn</strong>,&nbsp;<strong>Ni</strong>,&nbsp;<strong>Si</strong>,&nbsp;<strong>Cr</strong>) and&nbsp;<strong>Ms</strong>.</p>
-<p><span class="math inline">\(Ms = 769.41 -286.71 C -16.42 Mn -14.04 Ni - 13.89 Si - 10.13Cr -41.45C:Mn - 8.36 C:Ni\)</span></p>
-<p>As it can be see, the model has composed of two interaction parameters between Carbon and Manganese and Carbon and Nickle.</p>
-<p>The interpretation of the linear model can be done as follows:</p>
-<ul>
-<li><p>The coefficients represent the direct change in the Martensite start temperature (<strong>Ms</strong>) for a one-unit change in the predictor variable, holding all other variables constant.</p></li>
-<li><p>For example, a coefficient of&nbsp;<strong>-286.71</strong>&nbsp;for&nbsp;<strong>C</strong>&nbsp;means that for every 1% increase in carbon,&nbsp;<strong>Ms</strong>&nbsp;decreases by 286.71°C.</p></li>
-<li><p><strong>Interaction Terms</strong>: The interaction between&nbsp;<strong>C</strong>&nbsp;and&nbsp;<strong>Mn</strong>&nbsp;indicates that the effect of&nbsp;<strong>C</strong>&nbsp;on&nbsp;<strong>Ms</strong>&nbsp;depends on the level of&nbsp;<strong>Mn</strong>&nbsp;and vice versa.</p></li>
-</ul>
-</section>
-<section id="log-model-transformed-model" class="level3">
-<h3 class="anchored" data-anchor-id="log-model-transformed-model">Log Model (transformed model)</h3>
-<p>In this model, the dependent variable is <strong>log(Ms)</strong>. The log transformation is applied to stabilize variance and address potential skewness in the response variable. The model assumes a <strong>linear relationship</strong> between the predictors and the log-transformed response.</p>
-<p><span class="math inline">\(log(Ms) = -6.69 - 0.51C - 0.03 Mn - 0.03 Ni - 0.03 Si - 0.02Cr - 0.07 C:Mn - 0.01C:Ni\)</span></p>
-<p>The interpretation of the log model can be done as follows:</p>
-<ul>
-<li><p>In the log-transformed model, the coefficients represent the&nbsp;<strong>percentage change</strong>&nbsp;in&nbsp;<strong>Ms</strong>&nbsp;for a one-unit change in the predictor. Since the dependent variable is on a logarithmic scale, the coefficients can be interpreted as follows:</p>
-<ul>
-<li>A coefficient of&nbsp;<strong>-0.51</strong>&nbsp;for&nbsp;<strong>C</strong>&nbsp;means that for a 1% increase in carbon,&nbsp;<strong>Ms</strong>&nbsp;decreases by about&nbsp;<strong>40%</strong>&nbsp;(since <span class="math inline">\(e^{0.51} = 0.60\)</span>).</li>
-</ul></li>
-<li><p><strong>Interaction Terms</strong>: The interaction terms in this model indicate how the combination of variables affects the percentage change in&nbsp;<strong>Ms</strong>.</p></li>
-</ul>
-</section>
-<section id="choosing-between-models" class="level3">
-<h3 class="anchored" data-anchor-id="choosing-between-models">Choosing Between Models</h3>
-<p>Cross-validation has been performed for each model based on k-fold (5-fold) method. The results have been considered to choose the best model.</p>
-<ul>
-<li><p><strong>Untransformed Model</strong>: This model was chosen to first understand the&nbsp;<strong>direct linear relationship</strong>&nbsp;between the chemical elements and&nbsp;<strong>Ms</strong>. It allows for easy interpretation and insight into how each chemical composition influences the Martensite start temperature.</p></li>
-<li><p><strong>Log-Transformed Model</strong>: This model was chosen because it addressed several issues observed in the untransformed model:</p>
-<ul>
-<li><p><strong>Non-normality of residuals</strong>: Residuals in the untransformed model were not normally distributed, violating a key assumption of linear regression.</p></li>
-<li><p><strong>Heteroscedasticity</strong>: The untransformed model showed non-constant variance in the residuals. The log transformation stabilized this.</p></li>
-<li><p>The log model provided a better fit based on residual deviance and cross-validation error.</p></li>
-</ul></li>
-</ul>
-</section>
-<section id="the-best-model" class="level3">
-<h3 class="anchored" data-anchor-id="the-best-model">The Best Model</h3>
-<p>Based on the cross-validation results and model diagnostics (such as residual deviance, AIC, and MSE), the&nbsp;<strong>log-transformed model</strong>&nbsp;is the best-performing model.</p>
-<ul>
-<li><p><strong>Log Model’s AIC</strong>:&nbsp;<strong>-4756.5</strong>, which is significantly lower than the untransformed model’s AIC of&nbsp;<strong>13545</strong>.</p></li>
-<li><p><strong>Residual Deviance</strong>: The log-transformed model’s residual deviance is much lower, showing a better fit to the data.</p></li>
-<li><p><strong>Cross-validation MSE</strong>: The log-transformed model had a much lower MSE (around&nbsp;<strong>0.0021</strong>) compared to the untransformed model (around&nbsp;<strong>774</strong>), indicating better generalization performance.</p></li>
-<li><p><strong>Stabilization of variance</strong>: The log transformation handled issues like heteroscedasticity and non-normality of residuals, making it more reliable.</p></li>
-</ul>
-</section>
-<section id="cross-validation-refinement" class="level3">
-<h3 class="anchored" data-anchor-id="cross-validation-refinement"><strong>Cross-Validation Refinement</strong>:</h3>
-<ul>
-<li><p><strong>K-Fold Cross-Validation with More Folds</strong>: increasing the number of folds (e.g., 10-fold) may provide a more robust estimate of the model’s generalization performance.</p></li>
-<li><p><strong>Leave-One-Out Cross-Validation (LOOCV)</strong>: A more granular approach to cross-validation that can further help us validate the model’s performance.</p></li>
-</ul>
-</section>
+<section id="running-code" class="level2">
+<h2 class="anchored" data-anchor-id="running-code">Running Code</h2>
+<p>When you click the <strong>Render</strong> button a document will be generated that includes both content and the output of embedded code. You can embed code like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>binom_pmf <span class="ot">&lt;-</span> <span class="cf">function</span>(n, pi) {</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  y_vals <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span>n</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  pmf <span class="ot">&lt;-</span> <span class="fu">dbinom</span>(y_vals, <span class="at">size =</span> n, <span class="at">prob =</span> pi)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">y =</span> y_vals, <span class="at">pmf =</span> pmf)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">6</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>pi_values <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.8</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>y_highlight <span class="ot">&lt;-</span> <span class="dv">1</span>  </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>plot_data <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(pi_values, <span class="cf">function</span>(pi) {</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> <span class="fu">binom_pmf</span>(n, pi)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  df<span class="sc">$</span>pi <span class="ot">&lt;-</span> pi</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(df)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>}))</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(plot_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(y), <span class="at">y =</span> pmf, <span class="at">group =</span> pi)) <span class="sc">+</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"gray"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>pi, <span class="at">labeller =</span> <span class="fu">label_bquote</span>(pi <span class="sc">==</span> .(pi))) <span class="sc">+</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data =</span> <span class="fu">subset</span>(plot_data, y <span class="sc">==</span> y_highlight), </span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>           <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(y), <span class="at">y =</span> pmf), </span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>           <span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"black"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Y (Number of Wins)"</span>, <span class="at">y =</span> <span class="fu">expression</span>(<span class="fu">f</span>(y <span class="sc">|</span> pi)), </span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Conditional pmf of Bin(6, pi) for different values of pi"</span>) <span class="sc">+</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Method_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>You can add options to executable code like this</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the likelihood function</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>likelihood <span class="ot">&lt;-</span> <span class="cf">function</span>(pi) {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="dv">6</span> <span class="sc">*</span> pi <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> pi)<span class="sc">^</span><span class="dv">5</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a sequence of possible values for pi between 0 and 1</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>pi_vals <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">by =</span> <span class="fl">0.01</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the likelihood for each value of pi</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>likelihood_vals <span class="ot">&lt;-</span> <span class="fu">sapply</span>(pi_vals, likelihood)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the likelihood function</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">pi =</span> pi_vals, <span class="at">likelihood =</span> likelihood_vals)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> pi, <span class="at">y =</span> likelihood)) <span class="sc">+</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Likelihood of Kasparov Winning 1 Game as a Function of π"</span>,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"π (Kasparov's Probability of Winning a Game)"</span>, </span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Likelihood"</span>) <span class="sc">+</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Method_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 
 </main>
