@@ -107,7 +107,7 @@ window.Quarto = {
 
 <section id="methodology" class="level2">
 <h2 class="anchored" data-anchor-id="methodology">Methodology</h2>
-<p>In this section, methods to evaluate the dataset (Martensite) and choosen models are explained. To have a strong model, some background knowledge in materials science has been applied.</p>
+<p>In this section, the method to evaluate the dataset (Martensite) and choose the final models are explained. To have a strong model, some background knowledge in materials science has been applied.</p>
 </section>
 <section id="martensite-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="martensite-dataset">Martensite Dataset</h2>
@@ -121,13 +121,13 @@ window.Quarto = {
 </section>
 <section id="models" class="level2">
 <h2 class="anchored" data-anchor-id="models">Models</h2>
-<p>Initial choice of predictor variables has been done based on previous knowledge in materials science. No interaction parameter has been considered in initial models. The model starts with a linear model. In the linear model, the initial model has started with the below equation:</p>
+<p>Initial choice of predictor variables has been done based on previous knowledge in materials science. No interaction parameter has been considered in initial models. The model starts with a linear model as it follows:</p>
 <p><span class="math inline">\(Ms = C + Ni + Mn + Mo + Si + Cr + V + Co\)</span></p>
 <p>The significance of predictor variables has been firstly evaluated by p-value as p-value &lt; 0.05 indicates a predictor is statistically significant. In this step, Vanadium (V) and Cobalt (Co) have been removed from the model. They also showed multicollinearity, which made it difficult to interpret the model later. Removing V and Co could reduce AIC for the model.</p>
 <p>The improvement in models has been evaluated by monitoring residual deviances and AICs. Moreover, residual vs.&nbsp;fitted plot and Q-Q plots of residuals have been evaluated for models.</p>
-<p>For further improvement, interaction parameters have been introduced for the most important predictors. Accordingly, in addition to C, Mn, and Ni, the interaction parameters of C-Mn and C-Ni have been added to the model.</p>
-<p>Leverage and influential datapoints have been evaluated by Cook’s distance. In this regard, three influential datapoints have been investigated, data point #1145, 718, and 719. It is revealed that these points represent extreme content of either Carbon or Manganese. They have been removed from the dataset, and model has been updated. This has caused a great improvement in the models.</p>
-<p>Further improvement has been achieved by considering a log model. Accordingly, two different models have been developed to capture correlations between Ms and chemical elements. The first model is a linear model (untransformed model), and the second model is a log-transformed model. In the former, the dependent variable is Ms.&nbsp;In the later, the dependent variable is log (Ms). The final models have been presented as follows after checking multicollinearity among predictor variables for each model.</p>
+<p>For further improvement, interaction parameters have been introduced for the most important predictors. Accordingly, in addition to C, Mn, and Ni as individual predictors, the interaction parameters of C-Mn and C-Ni have been added to the model.</p>
+<p>Leverage and influential datapoints have been evaluated by Cook’s distance. In this regard, three influential datapoints have been investigated: data point #1145, 718, and 719. It is revealed that these points represent extreme content of either Carbon or Manganese. They have been removed from the dataset, and model has been updated. This step has caused a great improvement in the models.</p>
+<p>Further improvement has been achieved by considering a log model. Accordingly, two different models have been developed to capture correlations between Ms and chemical elements. As it mentioned earlier, the first model is a linear model (untransformed model), and the second model is a log-transformed model. In the former, the dependent variable is Ms.&nbsp;In the later, the dependent variable is log (Ms). The final models have been presented as follows after checking multicollinearity among predictor variables for each model.</p>
 <section id="linear-model-untransformed-model" class="level3">
 <h3 class="anchored" data-anchor-id="linear-model-untransformed-model">Linear Model (untransformed model)</h3>
 <p>The dependent variable is the <strong>Martensite Starting Temperature (Ms)</strong>, and It is directly modeled without any transformations. This model assumes a&nbsp;<strong>linear relationship</strong>&nbsp;between the chemical elements (such as&nbsp;<strong>C</strong>,&nbsp;<strong>Mn</strong>,&nbsp;<strong>Ni</strong>,&nbsp;<strong>Si</strong>,&nbsp;<strong>Cr</strong>) and&nbsp;<strong>Ms</strong>.</p>
@@ -146,7 +146,7 @@ window.Quarto = {
 <p><span class="math inline">\(log(Ms) = -6.69 - 0.51C - 0.03 Mn - 0.03 Ni - 0.03 Si - 0.02Cr - 0.07 C:Mn - 0.01C:Ni\)</span></p>
 <p>The interpretation of the log model can be done as follows:</p>
 <ul>
-<li><p>In the log-transformed model, the coefficients represent the&nbsp;<strong>percentage change</strong>&nbsp;in&nbsp;<strong>Ms</strong>&nbsp;for a one-unit change in the predictor. Since the dependent variable is on a logarithmic scale, you can interpret the coefficients as:</p>
+<li><p>In the log-transformed model, the coefficients represent the&nbsp;<strong>percentage change</strong>&nbsp;in&nbsp;<strong>Ms</strong>&nbsp;for a one-unit change in the predictor. Since the dependent variable is on a logarithmic scale, the coefficients can be interpreted as follows:</p>
 <ul>
 <li>A coefficient of&nbsp;<strong>-0.51</strong>&nbsp;for&nbsp;<strong>C</strong>&nbsp;means that for a 1% increase in carbon,&nbsp;<strong>Ms</strong>&nbsp;decreases by about&nbsp;<strong>40%</strong>&nbsp;(since <span class="math inline">\(e^{0.51} = 0.60\)</span>).</li>
 </ul></li>

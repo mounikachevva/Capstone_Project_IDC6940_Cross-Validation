@@ -3,7 +3,7 @@ title: "Methodology"
 author: "Hooman Sabarou"
 format: html
 editor: visual
-date: Oct-13-2024
+date: Oct-20-2024
 ---
 
 ## Methodology
@@ -48,7 +48,7 @@ As it can be see, the model has composed of two interaction parameters between C
 
 The interpretation of the linear model can be done as follows:
 
--    The coefficients represent the direct change in the Martensite start temperature (**Ms**) for a one-unit change in the predictor variable, holding all other variables constant.
+-   The coefficients represent the direct change in the Martensite start temperature (**Ms**) for a one-unit change in the predictor variable, holding all other variables constant.
 
 -   For example, a coefficient of **-286.71** for **C** means that for every 1% increase in carbon, **Ms** decreases by 286.71°C.
 
@@ -93,3 +93,9 @@ Based on the cross-validation results and model diagnostics (such as residual de
 -   **Cross-validation MSE**: The log-transformed model had a much lower MSE (around **0.0021**) compared to the untransformed model (around **774**), indicating better generalization performance.
 
 -   **Stabilization of variance**: The log transformation handled issues like heteroscedasticity and non-normality of residuals, making it more reliable.
+
+### **Cross-Validation Refinement**:
+
+-   **K-Fold Cross-Validation with More Folds**: increasing the number of folds (e.g., 10-fold) may provide a more robust estimate of the model’s generalization performance.
+
+-   **Leave-One-Out Cross-Validation (LOOCV)**: A more granular approach to cross-validation that can further help us validate the model's performance.
