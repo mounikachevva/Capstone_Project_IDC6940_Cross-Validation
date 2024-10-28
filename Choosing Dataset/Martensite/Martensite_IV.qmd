@@ -161,6 +161,7 @@ Residual Distribution is skewed.
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # Identify outliers
+#| echo: false
 outlier_residuals <- which(abs(residuals(updated_model)) > 2 * sd(residuals(updated_model)))
 dataset[outlier_residuals, ]
 
@@ -497,6 +498,10 @@ hist(filtered_dataset_no_influential_no_outlier$Cr, main = "Chromium (Cr) Distri
 | C:Ni      | N/A        | -8.36                   | 9.68E-10 |
 +-----------+------------+-------------------------+----------+
 
+#### The model is: 
+
+$Ms = 769.41 -286.71 C -16.42 Mn -14.04 Ni - 13.89 Si - 10.13Cr -41.45C:Mn - 8.36 C:Ni$
+
 ### Table 2 Log-Transformed Model
 
 ```{=html}
@@ -527,6 +532,10 @@ hist(filtered_dataset_no_influential_no_outlier$Cr, main = "Chromium (Cr) Distri
 +-----------+------------+-------------------------+----------+
 | C:Ni      | N/A        | -0.0154                 | 1.01E-11 |
 +-----------+------------+-------------------------+----------+
+
+#### The model is: 
+
+$log(Ms) = -6.69 - 0.51C - 0.03 Mn - 0.03 Ni - 0.03 Si - 0.02Cr - 0.07 C:Mn - 0.01C:Ni$
 
 ### Cross-Validation
 

@@ -24,17 +24,46 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="Martensite_III_files/libs/clipboard/clipboard.min.js"></script>
-<script src="Martensite_III_files/libs/quarto-html/quarto.js"></script>
-<script src="Martensite_III_files/libs/quarto-html/popper.min.js"></script>
-<script src="Martensite_III_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="Martensite_III_files/libs/quarto-html/anchor.min.js"></script>
-<link href="Martensite_III_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="Martensite_III_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="Martensite_III_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="Martensite_III_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="Martensite_III_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="Martensite_IV_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Martensite_IV_files/libs/quarto-html/quarto.js"></script>
+<script src="Martensite_IV_files/libs/quarto-html/popper.min.js"></script>
+<script src="Martensite_IV_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Martensite_IV_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Martensite_IV_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Martensite_IV_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Martensite_IV_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Martensite_IV_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Martensite_IV_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -130,7 +159,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Martensite_III_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Martensite_IV_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -144,7 +173,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Martensite_III_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Martensite_IV_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -157,7 +186,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Martensite_III_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Martensite_IV_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -169,7 +198,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Martensite_III_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Martensite_IV_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -218,14 +247,14 @@ Number of Fisher Scoring iterations: 2</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Martensite_III_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Martensite_IV_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Martensite_III_files/figure-html/unnamed-chunk-12-2.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Martensite_IV_files/figure-html/unnamed-chunk-12-2.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -486,7 +515,7 @@ Number of Fisher Scoring iterations: 2</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Martensite_III_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Martensite_IV_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -498,7 +527,7 @@ Number of Fisher Scoring iterations: 2</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Martensite_III_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Martensite_IV_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -510,7 +539,7 @@ Number of Fisher Scoring iterations: 2</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Martensite_III_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Martensite_IV_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -519,7 +548,7 @@ Number of Fisher Scoring iterations: 2</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Martensite_III_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Martensite_IV_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -629,7 +658,7 @@ Number of Fisher Scoring iterations: 2</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Martensite_III_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Martensite_IV_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -641,7 +670,7 @@ Number of Fisher Scoring iterations: 2</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Martensite_III_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Martensite_IV_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -650,7 +679,7 @@ Number of Fisher Scoring iterations: 2</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Martensite_III_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Martensite_IV_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -716,7 +745,7 @@ Number of Fisher Scoring iterations: 2</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Martensite_III_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Martensite_IV_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -728,7 +757,7 @@ Number of Fisher Scoring iterations: 2</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Martensite_III_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Martensite_IV_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -772,7 +801,7 @@ Number of Fisher Scoring iterations: 2</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Martensite_III_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Martensite_IV_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -784,7 +813,7 @@ Number of Fisher Scoring iterations: 2</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Martensite_III_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Martensite_IV_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -922,7 +951,7 @@ Cr 0.05</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Martensite_III_files/figure-html/unnamed-chunk-42-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Martensite_IV_files/figure-html/unnamed-chunk-42-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -999,6 +1028,10 @@ Cr 0.05</code></pre>
 </tr>
 </tbody>
 </table>
+<section id="the-model-is" class="level4">
+<h4 class="anchored" data-anchor-id="the-model-is">The model is:</h4>
+<p><span class="math inline">\(Ms = 769.41 -286.71 C -16.42 Mn -14.04 Ni - 13.89 Si - 10.13Cr -41.45C:Mn - 8.36 C:Ni\)</span></p>
+</section>
 </section>
 <section id="table-2-log-transformed-model" class="level3">
 <h3 class="anchored" data-anchor-id="table-2-log-transformed-model">Table 2 Log-Transformed Model</h3>
@@ -1071,6 +1104,10 @@ Cr 0.05</code></pre>
 </tr>
 </tbody>
 </table>
+<section id="the-model-is-1" class="level4">
+<h4 class="anchored" data-anchor-id="the-model-is-1">The model is:</h4>
+<p><span class="math inline">\(log(Ms) = -6.69 - 0.51C - 0.03 Mn - 0.03 Ni - 0.03 Si - 0.02Cr - 0.07 C:Mn - 0.01C:Ni\)</span></p>
+</section>
 </section>
 <section id="cross-validation" class="level3">
 <h3 class="anchored" data-anchor-id="cross-validation">Cross-Validation</h3>

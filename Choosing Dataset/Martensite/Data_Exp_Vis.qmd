@@ -1,5 +1,5 @@
 ---
-title: "Martensite Starting Temperature-Data Visualization & Data Exploration"
+title: "Martensite Starting Temperature"
 author: "Hooman Sabarou-Cross_Validation Group_Fall 2024"
 editor: visual
 format: html
@@ -23,7 +23,7 @@ head(dataset)
 
 ```
 
-<strong>C, Mn, Si, Cr, and etc. are referred to chemical elements based on the Periodic Table. They are Carbon, Manganese, Silicon, Chromium, and so on.</strong>
+C, Mn, Si, Cr, and etc. are referred to chemical elements based on Periodic Table. They are Carbon, Manganese, Silicon, Chromium and so on.
 
 ### Checking for missing values
 
@@ -33,9 +33,9 @@ sum(is.na(dataset))
 
 ```
 
-<strong>There are no missing values.</strong>
+There are no missing values.
 
-### Checking the Structure of the Dataset
+### Checking the structure of the dataset
 
 ```{r}
 # Check the structure of the dataset
@@ -157,7 +157,7 @@ Q-Q plot shows deviations for extreme values.
 
 Residual Distribution is skewed.
 
-### Identifying Outliers
+### Identifying outliers
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # Identify outliers
@@ -166,7 +166,7 @@ dataset[outlier_residuals, ]
 
 ```
 
-### Remove rows where Carbon content is zero, update the model, and the summary of the model.
+### Remove rows where Carbon content is zero, update the model, and the summary of the model. 
 
 2.  The model has been updated after removing zero cells for Carbon content.
 
@@ -196,7 +196,7 @@ summary(updated_model_interaction)
 
 ```
 
-### Update the model by removing V and add an interaction parameter between Carbon and Nickel.
+### Update the model by removing V and add an interaction parameter between Carbon and Nickel. 
 
 4.  Further revision in the model by removing a weak parameter and adding a new interaction parameter
 
@@ -218,11 +218,9 @@ After reviewing Q-Q plot and its deviations in extreme values and a skewed resid
 ```{r}
 log_model<- glm(formula = log(Ms) ~ C * Mn + C * Ni + Si + Cr, family = gaussian, data = filtered_dataset_no_C0)
 
-summary(log_model)
-
 ```
 
-### Performing ANOVA for the updated model.
+### Performing ANOVA for the updated model. 
 
 ```{r}
 library(classpackage)
@@ -252,7 +250,7 @@ cooks(updated_model_C_Ni_interaction)
 cooks(log_model)
 ```
 
-### Investigate the Influential Points
+### Investigate the influential points
 
 ```{r}
 # Investigate the influential points
@@ -262,9 +260,9 @@ filtered_dataset_no_C0[influential_points, ]
 
 ```
 
-By reviewing Carbon and Chromium contents, it can be decided that these three points are not representing routine chemistry for steels. They are unusual, and they can be removed.
+By reviewing Carbon and Chromium contents, it can be decided that these three points are not representing routine chemistries for steels. They are unusual, and they can be removed.
 
-### Remove Influential Points and Updating Models
+### Remove influential points and updating models
 
 ```{r}
 # Remove the influential points
@@ -292,7 +290,7 @@ summary(log_model_no_influential)
 
 ```
 
-### Investigate Points Found Out by Cook's Distances
+### Investigate points found out by Cook's distances
 
 ```{r}
 # Investigate the observations with moderate Cook's Distance
@@ -303,7 +301,7 @@ filtered_dataset_no_C0[moderate_influential_points, ]
 
 These observation are valid and will be kept in the dataset.
 
-### Apply the Residuals Check to the Filtered Dataset
+### Apply the residuals check to the filtered dataset
 
 ```{r}
 # Apply the residuals check to the correct dataset (filtered_dataset_no_influential)
@@ -320,7 +318,7 @@ filtered_dataset_no_influential <- filtered_dataset_no_influential %>%
 filtered_dataset_no_influential %>% count(outlier)
 ```
 
-### Plotting Carbon Content with Martensite Starting Temperature
+### Plotting Carbon content with Martensite starting temprature
 
 ```{r}
 library(ggplot2)
@@ -344,21 +342,17 @@ anova_check(log_model_no_influential)
 
 ### Check Multicollinearity
 
-#### First Model
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
+```{r}
 #Check Multicollinearity
 car::vif(updated_model_no_influential, type = "predictor")
 
 ```
 
-#### Log Model
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
+```{r}
 car::vif(log_model_no_influential, type = "predictor")
 ```
 
-[There is no concerning level of multicollinearity for both models.]{style="color: red;"}
+There is no concerning level of multicollinearity for both models.
 
 ### Remove Identified Outliers and Revise Both Models
 
@@ -420,21 +414,14 @@ cooks(log_model_no_influential_no_outlier)
 .tg .tg-0lax{text-align:left;vertical-align:top}
 </style>
 ```
-+---------+---------------+----------------+----------------+----------------+----------------+----------------+
-|         |       Ms      |       C        |       Mn       |       Ni       |       Si       |       Cr       |
-+=========+===============+================+================+================+================+================+
-|         | Min.   :310.0 | Min.   :0.0016 | Min.   :0.0000 | Min.   : 0.000 | Min.   :0.0000 | Min.   : 0.000 |
-+---------+---------------+----------------+----------------+----------------+----------------+----------------+
-|         | 1st Qu.:553.5 | 1st Qu.:0.1600 | 1st Qu.:0.4700 | 1st Qu.: 0.000 | 1st Qu.:0.2000 | 1st Qu.: 0.000 |
-+---------+---------------+----------------+----------------+----------------+----------------+----------------+
-|         | Median :605.0 | Median :0.3300 | Median :0.6900 | Median : 0.150 | Median :0.2600 | Median : 0.520 |
-+---------+---------------+----------------+----------------+----------------+----------------+----------------+
-|         | Mean   :601.8 | Mean   :0.3617 | Mean   :0.7917 | Mean   : 1.558 | Mean   :0.3475 | Mean : 1.043   |
-+---------+---------------+----------------+----------------+----------------+----------------+----------------+
-|         | 3rd Qu.:670.0 | 3rd Qu.:0.4400 | 3rd Qu.:0.9700 | 3rd Qu.: 1.580 | 3rd Qu.:0.3400 | 3rd Qu.: 1.150 |
-+---------+---------------+----------------+----------------+----------------+----------------+----------------+
-|         | Max.   :784.0 | Max.   :1.4600 | Max.   :4.9500 | Max.   :27.200 | Max.   :3.8000 | Max.   :16.200 |
-+---------+---------------+----------------+----------------+----------------+----------------+----------------+
+|     |       Ms      |       C        |       Mn       |       Ni       |       Si       |       Cr       |
+|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
+|     | Min.   :310.0 | Min.   :0.0016 | Min.   :0.0000 | Min.   : 0.000 | Min.   :0.0000 | Min.   : 0.000 |
+|     | 1st Qu.:553.5 | 1st Qu.:0.1600 | 1st Qu.:0.4700 | 1st Qu.: 0.000 | 1st Qu.:0.2000 | 1st Qu.: 0.000 |
+|     | Median :605.0 | Median :0.3300 | Median :0.6900 | Median : 0.150 | Median :0.2600 | Median : 0.520 |
+|     | Mean   :601.8 | Mean   :0.3617 | Mean   :0.7917 | Mean   : 1.558 | Mean   :0.3475 | Mean : 1.043   |
+|     | 3rd Qu.:670.0 | 3rd Qu.:0.4400 | 3rd Qu.:0.9700 | 3rd Qu.: 1.580 | 3rd Qu.:0.3400 | 3rd Qu.: 1.150 |
+|     | Max.   :784.0 | Max.   :1.4600 | Max.   :4.9500 | Max.   :27.200 | Max.   :3.8000 | Max.   :16.200 |
 
 ```{r}
 write.csv(summary(filtered_dataset_no_influential_no_outlier[c("Ms", "C", "Mn", "Ni", "Si", "Cr")]), "NewTable.csv")
@@ -442,7 +429,7 @@ write.csv(summary(filtered_dataset_no_influential_no_outlier[c("Ms", "C", "Mn", 
 
 ### Updated Summary for the Revised Dataset
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
+```{r}
 # Descriptive statistics summary for key variables
 summary(filtered_dataset_no_influential_no_outlier[c("Ms", "C", "Mn", "Ni", "Si", "Cr")])
 
@@ -452,7 +439,7 @@ describe(filtered_dataset_no_influential_no_outlier[c("Ms", "C", "Mn", "Ni", "Si
 
 ```
 
-### Histograms for Key Variables in the Revised Dataset
+### Histograms for Key Variables  for Revised Dataset
 
 ```{r}
 # Plot histograms for key variables
@@ -466,73 +453,11 @@ hist(filtered_dataset_no_influential_no_outlier$Cr, main = "Chromium (Cr) Distri
 
 ```
 
-### Table 2 Untransformed Model 
-
-```{=html}
-<style type="text/css">
-.tg  {border-collapse:collapse;border-spacing:0;}
-.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-  overflow:hidden;padding:10px 5px;word-break:normal;}
-.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-.tg .tg-fymr{border-color:inherit;font-weight:bold;text-align:left;vertical-align:top}
-.tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
-</style>
-```
-+-----------+------------+-------------------------+----------+
-| Variables | Mean ± SD  | Correlation Coefficient | P-value  |
-+===========+============+=========================+==========+
-| C         | 0.36 ± 0.1 | -286.71                 | \< 2e-16 |
-+-----------+------------+-------------------------+----------+
-| Mn        | 0.79 ± 0.3 | -16.42                  | 1.36E-13 |
-+-----------+------------+-------------------------+----------+
-| Ni        | 1.55 ± 0.5 | -14.04                  | \< 2e-16 |
-+-----------+------------+-------------------------+----------+
-| Si        | 0.35 ± 0.2 | -13.89                  | 1.70E-13 |
-+-----------+------------+-------------------------+----------+
-| Cr        | 1.04 ± 0.7 | -10.13                  | \< 2e-16 |
-+-----------+------------+-------------------------+----------+
-| C:Mn      | N/A        | -41.45                  | \< 2e-16 |
-+-----------+------------+-------------------------+----------+
-| C:Ni      | N/A        | -8.36                   | 9.68E-10 |
-+-----------+------------+-------------------------+----------+
-
-### Table 2 Log-Transformed Model
-
-```{=html}
-<style type="text/css">
-.tg  {border-collapse:collapse;border-spacing:0;}
-.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-  overflow:hidden;padding:10px 5px;word-break:normal;}
-.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-.tg .tg-0thz{border-color:inherit;font-weight:bold;text-align:left;vertical-align:bottom}
-.tg .tg-za14{border-color:inherit;text-align:left;vertical-align:bottom}
-</style>
-```
-+-----------+------------+-------------------------+----------+
-| Variables | Mean ± SD  | Correlation Coefficient | P-value  |
-+===========+============+=========================+==========+
-| C         | 0.36 ± 0.1 | -0.51                   | \< 2e-16 |
-+-----------+------------+-------------------------+----------+
-| Mn        | 0.79 ± 0.3 | -0.032                  | \< 2e-16 |
-+-----------+------------+-------------------------+----------+
-| Ni        | 1.55 ± 0.5 | -0.0255                 | \< 2e-16 |
-+-----------+------------+-------------------------+----------+
-| Si        | 0.35 ± 0.2 | -0.0226                 | 4.48E-13 |
-+-----------+------------+-------------------------+----------+
-| Cr        | 1.04 ± 0.7 | -0.0175                 | \< 2e-16 |
-+-----------+------------+-------------------------+----------+
-| C:Mn      | N/A        | -0.0751                 | \< 2e-16 |
-+-----------+------------+-------------------------+----------+
-| C:Ni      | N/A        | -0.0154                 | 1.01E-11 |
-+-----------+------------+-------------------------+----------+
-
 ### Cross-Validation
 
 #### 5-Fold
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
+```{r}
 
 library(boot)
 
@@ -540,7 +465,7 @@ library(boot)
 
 ### Cross-Validation for the First Model
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
+```{r}
 # Define the final model formula
 final_model_formula <- Ms ~ C * Mn + C * Ni + Si + Cr
 
@@ -559,7 +484,7 @@ print(cv_result$delta)  # Cross-validation error (raw and bias-corrected)
 
 ### Cross-Validation for the Second Model (Log Model)
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
+```{r}
 # Load required libraries
 #library(boot)
 
