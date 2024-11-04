@@ -584,6 +584,14 @@ print(cv_result$delta)
 
 ```
 
+### Interpretation
+
+1.  **Consistency**: Both 5-fold and 10-fold cross-validations yield fairly similar results, which indicates stability in the model's predictive performance across different validation approaches.
+
+2.  **Slight Increase with 10-fold**: The error slightly increased with 10-fold cross-validation. This could be due to the smaller subsets in each fold, as 10-fold divides the data into smaller groups compared to 5-fold, potentially revealing more variability or minor overfitting effects.
+
+3.  **Implications for Model Evaluation**: These results suggest that while the untransformed model's performance is stable, there is no significant improvement in prediction error when using more folds. However, if computational efficiency or consistency is a priority, 5-fold might be a suitable choice.
+
 ### Cross-Validation for the Second Model (Log Model)
 
 #### 5-Fold
@@ -627,6 +635,18 @@ print(cv_results$delta)
 
 ```
 
+### Interpretation
+
+1.  **Stability Across Folds**: Both the 5-fold and 10-fold cross-validation results for the log-transformed model are extremely close, with very little variation between the fold types. This suggests that the log-transformed model is highly stable and performs consistently across different subsets of the data.
+
+2.  **Comparison with Untransformed Model**:
+
+    -   The cross-validation errors for the log-transformed model (`~0.0021`) are significantly lower than those of the untransformed model (`~774` to `~780`). This indicates that the log-transformed model likely fits the data better and generalizes more effectively.
+
+    -   The log-transformed model's lower error suggests it may be less sensitive to outliers or non-normality, providing a more reliable predictive performance.
+
+3.  **Selection of the Log-Transformed Model**: Given the much lower cross-validation errors and consistency across folds, the log-transformed model is clearly outperforming the untransformed model. This makes it the preferable choice for accurate and robust predictions of the Martensite start temperature.
+
 ### The **Leave-One-Out Cross-Validation (LOOCV)** 
 
 #### The Untransformed Model
@@ -657,3 +677,13 @@ log_loocv <- cv.glm(filtered_dataset_no_influential_no_outlier, log_model, K = n
 print(log_loocv$delta)
 
 ```
+
+### Model Comparison
+
+-   **Predictive Accuracy**: The log-transformed model performs better in terms of LOOCV error, suggesting it is more reliable for prediction. This result aligns with the findings from the earlier steps, where the log-transformed model consistently showed lower residual deviance and AIC.
+
+-   **Practical Use**: If the purpose of a model is interpretability or making predictions on the original scale of `Ms`, the untransformed model may still be relevant despite the higher LOOCV error. However, for optimal prediction accuracy, the log-transformed model is superior based on these results.
+
+### Conclusion
+
+The log-transformed model shows a more stable and lower prediction error with LOOCV, supporting its choice as the better model in terms of predictive performance.

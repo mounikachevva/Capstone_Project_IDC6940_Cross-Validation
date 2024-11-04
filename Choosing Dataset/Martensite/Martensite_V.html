@@ -1134,6 +1134,14 @@ Cr 0.05</code></pre>
 </div>
 </section>
 </section>
+<section id="interpretation" class="level3">
+<h3 class="anchored" data-anchor-id="interpretation">Interpretation</h3>
+<ol type="1">
+<li><p><strong>Consistency</strong>: Both 5-fold and 10-fold cross-validations yield fairly similar results, which indicates stability in the model’s predictive performance across different validation approaches.</p></li>
+<li><p><strong>Slight Increase with 10-fold</strong>: The error slightly increased with 10-fold cross-validation. This could be due to the smaller subsets in each fold, as 10-fold divides the data into smaller groups compared to 5-fold, potentially revealing more variability or minor overfitting effects.</p></li>
+<li><p><strong>Implications for Model Evaluation</strong>: These results suggest that while the untransformed model’s performance is stable, there is no significant improvement in prediction error when using more folds. However, if computational efficiency or consistency is a priority, 5-fold might be a suitable choice.</p></li>
+</ol>
+</section>
 <section id="cross-validation-for-the-second-model-log-model" class="level3">
 <h3 class="anchored" data-anchor-id="cross-validation-for-the-second-model-log-model">Cross-Validation for the Second Model (Log Model)</h3>
 <section id="fold-3" class="level4">
@@ -1153,6 +1161,18 @@ Cr 0.05</code></pre>
 </div>
 </section>
 </section>
+<section id="interpretation-1" class="level3">
+<h3 class="anchored" data-anchor-id="interpretation-1">Interpretation</h3>
+<ol type="1">
+<li><p><strong>Stability Across Folds</strong>: Both the 5-fold and 10-fold cross-validation results for the log-transformed model are extremely close, with very little variation between the fold types. This suggests that the log-transformed model is highly stable and performs consistently across different subsets of the data.</p></li>
+<li><p><strong>Comparison with Untransformed Model</strong>:</p>
+<ul>
+<li><p>The cross-validation errors for the log-transformed model (<code>~0.0021</code>) are significantly lower than those of the untransformed model (<code>~774</code> to <code>~780</code>). This indicates that the log-transformed model likely fits the data better and generalizes more effectively.</p></li>
+<li><p>The log-transformed model’s lower error suggests it may be less sensitive to outliers or non-normality, providing a more reliable predictive performance.</p></li>
+</ul></li>
+<li><p><strong>Selection of the Log-Transformed Model</strong>: Given the much lower cross-validation errors and consistency across folds, the log-transformed model is clearly outperforming the untransformed model. This makes it the preferable choice for accurate and robust predictions of the Martensite start temperature.</p></li>
+</ol>
+</section>
 <section id="the-leave-one-out-cross-validation-loocv" class="level3">
 <h3 class="anchored" data-anchor-id="the-leave-one-out-cross-validation-loocv">The <strong>Leave-One-Out Cross-Validation (LOOCV)</strong></h3>
 <section id="the-untransformed-model" class="level4">
@@ -1171,6 +1191,17 @@ Cr 0.05</code></pre>
 </div>
 </div>
 </section>
+</section>
+<section id="model-comparison" class="level3">
+<h3 class="anchored" data-anchor-id="model-comparison">Model Comparison</h3>
+<ul>
+<li><p><strong>Predictive Accuracy</strong>: The log-transformed model performs better in terms of LOOCV error, suggesting it is more reliable for prediction. This result aligns with the findings from the earlier steps, where the log-transformed model consistently showed lower residual deviance and AIC.</p></li>
+<li><p><strong>Practical Use</strong>: If the purpose of a model is interpretability or making predictions on the original scale of <code>Ms</code>, the untransformed model may still be relevant despite the higher LOOCV error. However, for optimal prediction accuracy, the log-transformed model is superior based on these results.</p></li>
+</ul>
+</section>
+<section id="conclusion" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
+<p>The log-transformed model shows a more stable and lower prediction error with LOOCV, supporting its choice as the better model in terms of predictive performance.</p>
 </section>
 
 </main>
