@@ -1,0 +1,126 @@
+---
+title: "Cross-Validation"
+subtitle: "Hooman Sabarou & Mounika Chevva (Advisor: Dr. Seals)"
+author: "Literature Review-Fall 2024"
+execute:
+  echo: true
+  warning: false
+  message: false
+  error: false
+format: 
+  revealjs:
+    theme: sky
+    embed-resources: true
+    slide-number: false
+    width: 1600
+    height: 900
+    df-print: paged
+    html-math-method: katex
+    bibliography: references.bib 
+    csl: ieee.csl    
+editor: source
+pdf-separate-fragments: true
+fig-align: center
+---
+
+
+## Introduction  {.smaller}
+
+- **Challenges in Cross-Validation:** Traditional methods like k-fold and leave-one-out cross-validation face limitations like overfitting, variance, and inefficiency in large datasets. 
+- **Innovative Solutions:** New techniques such as Cross-Validation Voting (CVV), Monte Carlo cross-validation (MCCV), and improved methods for selecting the right number of components (Wold, EK procedures) enhance model generalization, reduce overfitting, and improve error rate estimation.
+- **Performance and Efficiency:** Leveraging advanced methods like Parallel-CV and GPU-based parallelization, as well as alternative cross-validation approaches in multivariate models, significantly boosts efficiency and accuracy, especially for large or small datasets.
+
+
+## Literature Review {.smaller}
+
+- CNN models face challenges like overfitting and generalization issues in supermarket product classification.[@domingo2022cross]
+- Ensemble learning strategies such as voting, boosting, and bagging are commonly used to improve performance but often rely on single classifiers or validation sets.
+- The Cross-Validation Voting (CVV) method proposed by Duque Domingo et al. improves generalization and reduces overfitting, outperforming traditional methods in grocery classification.[@yates2023cross],[@qi2019estimating],[ @6322811]
+
+## Literature Review {.smaller}
+
+- Overview of Cross-Validation Methods: The paper covers data splitting techniques, including single hold-out, k-fold, and leave-one-out cross-validation. [@Berrar2019-gy]
+- Pros and Cons: Each method's advantages and limitations are discussed in relation to dataset size and complexity.
+- Key Concepts: The paper addresses overfitting, stratification, and how to select the final model based on cross-validation results. [@Wentzien2024-in][@xu2001]
+
+
+## Literature Review {.smaller}
+
+- Focus on Model Generalizability: The paper highlights the issue of overfitting in statistical models and their poor performance on new data. [@song2021]
+- Cross-Validation Techniques: It introduces k-fold and Monte Carlo cross-validation as methods to assess and improve generalizability, with practical implementation in R using the caret package.
+- Interactive Example: A hands-on Shiny app example illustrates how factors like model complexity, sample size, and effect size impact generalizability.
+
+## Literature Review {.smaller}
+
+- Cross-Validation in PCA: The paper examines how cross-validation techniques help select the correct number of components in principal component analysis (PCA) to avoid overfitting and improve prediction accuracy.[@bro2008]
+- Alternative Methods: It introduces the improved Wold and Eastment–Krzanowski (EK) procedures to address overfitting and bias in component models.
+- Performance of Methods: The study finds that the Eigenvector and EM methods outperform others, particularly for smaller datasets, emphasizing the importance of choosing the right cross-validation method based on dataset size and complexity.
+
+## Methodology {.smaller}
+
+- Initial Data Exploration (Filtering & Removal)
+  
+- ### **Modeling Approach**:
+- Untransformed Model: Directly modeled Ms using predictors like C, Mn, Ni, Si, Cr, with interaction terms. 
+- Log-Transformed Model: Modeled log(Ms) to handle non-normality and stabilize variance, using the same predictors and interaction terms.
+
+- Model Improvements (Predictors' Removal, Introducting Interaction Parameters, Outliers' Removal)
+
+- Model Diagnostics (ANOVA, AIC, Cross-Validation, Check for Multicollinearity, Influential Points' Removal)
+
+- Model Evaluation:
+The log-transformed model showed significantly better performance with a lower AIC and cross-validation MSE.
+Residual deviance and cross-validation confirmed that the log model generalized better to unseen data.
+- Cross-Validation Refinement:
+  + K-Fold Cross-Validation with More Folds
+  + Leave-One-Out Cross-Validation (LOOCV) 
+- Programing has been done by R [@R] in Rstudio (version 2024.04.2) 
+- Utilized packages: tidyverse [@tidyverse], classpackage [@classpackage], 
+ggplot2 [@gg], psych [@psych], and boot [@boot1,@boot2]
+
+## Models
+
+- ### First Model:
+
+$Ms = 769.41 -286.71 C -16.42 Mn -14.04 Ni - 13.89 Si - 10.13Cr -41.45C:Mn - 8.36 C:Ni$
+
+- ### Second Model: 
+
+$log(Ms) = -6.69 - 0.51C - 0.03 Mn - 0.03 Ni - 0.03 Si - 0.02Cr - 0.07 C:Mn - 0.01C:Ni$
+
+- ### Cross-Validation
+
+Two kinds of cross-validation methods have been conducted: k-Fold and the Leave-One-Out Cross-Validation (LOOCV)
+
+## k-Fold 
+
+Interpretation
+
+- ### Stability Across Folds: 
+
+Both the 5-fold and 10-fold cross-validation results for the log-transformed model are extremely close, with very little variation between the fold types. This suggests that the log-transformed model is highly stable and performs consistently across different subsets of the data.
+
+- ### Comparison with Untransformed Model:
+
+The cross-validation errors for the log-transformed model (~0.0021) are significantly lower than those of the untransformed model (~774 to ~780). This indicates that the log-transformed model likely fits the data better and generalizes more effectively.
+
+## LOOCV:
+
+- ### Predictive Accuracy: 
+The log-transformed model performs better in terms of LOOCV error, suggesting it is more reliable for prediction. 
+
+- ### Practical Use: 
+If the purpose of a model is interpretability or making predictions on the original scale of Ms, the untransformed model may still be relevant despite the higher LOOCV error. However, for optimal prediction accuracy, the log-transformed model is superior based on these results.
+
+## Conclusion
+
+- The log-transformed model is the preferred choice based on k-fold cross-validation results. It demonstrates both lower prediction error and stability across different folds, making it a robust and accurate model for predicting the Martensite start temperature. Therefore, the log-transformed model should be selected as the final model for this project, as it provides more reliable predictions and handles the underlying data structure more effectively.
+
+- The log-transformed model shows a more stable and lower prediction error with LOOCV, supporting its choice as the better model in terms of predictive performance.
+
+
+## References
+
+
+
+
