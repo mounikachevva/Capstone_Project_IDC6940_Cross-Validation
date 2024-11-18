@@ -1,7 +1,9 @@
 ---
 title: "Literature Review"
 subtitle: "Hooman Sabarou & Mounika"
-author: "Cross-Validation"
+author: "Mounika Chevva,Hooman Sabarou (Advisor: Dr. Samantha Seals)"
+date: 'today'
+
 execute:
   echo: true
   warning: false
