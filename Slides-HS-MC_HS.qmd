@@ -56,6 +56,14 @@ fig-align: center
 - Alternative Methods: It introduces the improved Wold and Eastment–Krzanowski (EK) procedures to address overfitting and bias in component models.
 - Performance of Methods: The study finds that the Eigenvector and EM methods outperform others, particularly for smaller datasets, emphasizing the importance of choosing the right cross-validation method based on dataset size and complexity.
 
+## Dataset {.smaller}
+
+![](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.hanbonforge.com%2Fblog%2FThe-quenching-process-in-forging-swords&psig=AOvVaw1KL2I3HFg9JIi2lMtDXSMM&ust=1731871953794000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKD0vvrL4YkDFQAAAAAdAAAAABAE){width=70%}
+
+
+- Martensite Starting Temperature
+
+
 ## Methodology {.smaller}
 
 - Initial Data Exploration (Filtering & Removal)

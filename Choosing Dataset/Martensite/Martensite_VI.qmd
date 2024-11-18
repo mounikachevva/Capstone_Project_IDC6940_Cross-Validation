@@ -422,14 +422,96 @@ cooks(log_model_no_influential_no_outlier)
 .tg .tg-0lax{text-align:left;vertical-align:top}
 </style>
 ```
-|     |       Ms      |       C        |       Mn       |       Ni       |       Si       |       Cr       |
-|----------|----------|----------|----------|----------|----------|----------|
-|     | Min.   :310.0 | Min.   :0.0016 | Min.   :0.0000 | Min.   : 0.000 | Min.   :0.0000 | Min.   : 0.000 |
-|     | 1st Qu.:553.5 | 1st Qu.:0.1600 | 1st Qu.:0.4700 | 1st Qu.: 0.000 | 1st Qu.:0.2000 | 1st Qu.: 0.000 |
-|     | Median :605.0 | Median :0.3300 | Median :0.6900 | Median : 0.150 | Median :0.2600 | Median : 0.520 |
-|     | Mean   :601.8 | Mean   :0.3617 | Mean   :0.7917 | Mean   : 1.558 | Mean   :0.3475 | Mean : 1.043   |
-|     | 3rd Qu.:670.0 | 3rd Qu.:0.4400 | 3rd Qu.:0.9700 | 3rd Qu.: 1.580 | 3rd Qu.:0.3400 | 3rd Qu.: 1.150 |
-|     | Max.   :784.0 | Max.   :1.4600 | Max.   :4.9500 | Max.   :27.200 | Max.   :3.8000 | Max.   :16.200 |
++--------+---------------+----------------+----------------+----------------+----------------+----------------+
+|        |       Ms      |       C        |       Mn       |       Ni       |       Si       |       Cr       |
++========+===============+================+================+================+================+================+
+|        | Min.   :310.0 | Min.   :0.0016 | Min.   :0.0000 | Min.   : 0.000 | Min.   :0.0000 | Min.   : 0.000 |
++--------+---------------+----------------+----------------+----------------+----------------+----------------+
+|        | 1st Qu.:553.5 | 1st Qu.:0.1600 | 1st Qu.:0.4700 | 1st Qu.: 0.000 | 1st Qu.:0.2000 | 1st Qu.: 0.000 |
++--------+---------------+----------------+----------------+----------------+----------------+----------------+
+|        | Median :605.0 | Median :0.3300 | Median :0.6900 | Median : 0.150 | Median :0.2600 | Median : 0.520 |
++--------+---------------+----------------+----------------+----------------+----------------+----------------+
+|        | Mean   :601.8 | Mean   :0.3617 | Mean   :0.7917 | Mean   : 1.558 | Mean   :0.3475 | Mean : 1.043   |
++--------+---------------+----------------+----------------+----------------+----------------+----------------+
+|        | 3rd Qu.:670.0 | 3rd Qu.:0.4400 | 3rd Qu.:0.9700 | 3rd Qu.: 1.580 | 3rd Qu.:0.3400 | 3rd Qu.: 1.150 |
++--------+---------------+----------------+----------------+----------------+----------------+----------------+
+|        | Max.   :784.0 | Max.   :1.4600 | Max.   :4.9500 | Max.   :27.200 | Max.   :3.8000 | Max.   :16.200 |
++--------+---------------+----------------+----------------+----------------+----------------+----------------+
+
+```{=html}
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-0lax{text-align:left;vertical-align:top}
+</style>
+```
++----------------+------+------+
+| Variable       | Mean | SD   |
++================+======+======+
+| C (Carbon)     | 0.36 | 0.10 |
++----------------+------+------+
+| Mn (Manganese) | 0.79 | 0.30 |
++----------------+------+------+
+| Ni (Nickel)    | 1.56 | 0.50 |
++----------------+------+------+
+| Si (Silicon)   | 0.35 | 0.20 |
++----------------+------+------+
+| Cr (Chromium)  | 1.04 | 0.70 |
++----------------+------+------+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Example dataset: Replace this with your actual dataset
+data <- filtered_dataset_no_influential_no_outlier[c("Ms", "C", "Mn", "Ni", "Si", "Cr")]
+
+# Calculate summary statistics
+summary_table <- data.frame(
+  Variable = c("Ms (Martensite Start Temp)", "C (Carbon)", "Mn (Manganese)", "Ni (Nickel)", "Si (Silicon)", "Cr (Chromium)"),
+  Mean = round(sapply(data, mean), 2),
+  Median = round(sapply(data, median), 2),
+  Min = round(sapply(data, min), 2),
+  Max = round(sapply(data, max), 2),
+  SD = round(sapply(data, sd), 2)
+)
+
+# Generate the HTML table in your preferred format
+cat("
+<style type='text/css'>
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-0lax{text-align:left;vertical-align:top}
+</style>
+<table class='tg'>
+  <thead>
+    <tr>
+      <th class='tg-0lax'>Variable</th>
+      <th class='tg-0lax'>Mean</th>
+      <th class='tg-0lax'>Median</th>
+      <th class='tg-0lax'>Min</th>
+      <th class='tg-0lax'>Max</th>
+      <th class='tg-0lax'>SD</th>
+    </tr>
+  </thead>
+  <tbody>
+")
+for (i in 1:nrow(summary_table)) {
+  cat("<tr>
+    <td class='tg-0lax'>", summary_table$Variable[i], "</td>
+    <td class='tg-0lax'>", summary_table$Mean[i], "</td>
+    <td class='tg-0lax'>", summary_table$Median[i], "</td>
+    <td class='tg-0lax'>", summary_table$Min[i], "</td>
+    <td class='tg-0lax'>", summary_table$Max[i], "</td>
+    <td class='tg-0lax'>", summary_table$SD[i], "</td>
+  </tr>")
+}
+cat("</tbody></table>")
+
+```
 
 ```{r}
 write.csv(summary(filtered_dataset_no_influential_no_outlier[c("Ms", "C", "Mn", "Ni", "Si", "Cr")]), "NewTable.csv")
@@ -474,15 +556,23 @@ hist(filtered_dataset_no_influential_no_outlier$Cr, main = "Chromium (Cr) Distri
 .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
 </style>
 ```
-| Variables | Mean ± SD  | Correlation Coefficient | P-value  |
-|-----------|------------|-------------------------|----------|
-| C         | 0.36 ± 0.1 | -286.71                 | \< 2e-16 |
-| Mn        | 0.79 ± 0.3 | -16.42                  | 1.36E-13 |
-| Ni        | 1.55 ± 0.5 | -14.04                  | \< 2e-16 |
-| Si        | 0.35 ± 0.2 | -13.89                  | 1.70E-13 |
-| Cr        | 1.04 ± 0.7 | -10.13                  | \< 2e-16 |
-| C:Mn      | N/A        | -41.45                  | \< 2e-16 |
-| C:Ni      | N/A        | -8.36                   | 9.68E-10 |
++------------+------------+-------------------------+------------+
+| Variables  | Mean ± SD  | Correlation Coefficient | P-value    |
++============+============+=========================+============+
+| C          | 0.36 ± 0.1 | -286.71                 | \< 2e-16   |
++------------+------------+-------------------------+------------+
+| Mn         | 0.79 ± 0.3 | -16.42                  | 1.36E-13   |
++------------+------------+-------------------------+------------+
+| Ni         | 1.55 ± 0.5 | -14.04                  | \< 2e-16   |
++------------+------------+-------------------------+------------+
+| Si         | 0.35 ± 0.2 | -13.89                  | 1.70E-13   |
++------------+------------+-------------------------+------------+
+| Cr         | 1.04 ± 0.7 | -10.13                  | \< 2e-16   |
++------------+------------+-------------------------+------------+
+| C:Mn       | N/A        | -41.45                  | \< 2e-16   |
++------------+------------+-------------------------+------------+
+| C:Ni       | N/A        | -8.36                   | 9.68E-10   |
++------------+------------+-------------------------+------------+
 
 #### The model is:
 
@@ -531,15 +621,23 @@ Each coefficient in this model tells us the **marginal effect** of that variab
 .tg .tg-za14{border-color:inherit;text-align:left;vertical-align:bottom}
 </style>
 ```
-| Variables | Mean ± SD  | Correlation Coefficient | P-value  |
-|-----------|------------|-------------------------|----------|
-| C         | 0.36 ± 0.1 | -0.51                   | \< 2e-16 |
-| Mn        | 0.79 ± 0.3 | -0.032                  | \< 2e-16 |
-| Ni        | 1.55 ± 0.5 | -0.0255                 | \< 2e-16 |
-| Si        | 0.35 ± 0.2 | -0.0226                 | 4.48E-13 |
-| Cr        | 1.04 ± 0.7 | -0.0175                 | \< 2e-16 |
-| C:Mn      | N/A        | -0.0751                 | \< 2e-16 |
-| C:Ni      | N/A        | -0.0154                 | 1.01E-11 |
++------------+------------+-------------------------+------------+
+| Variables  | Mean ± SD  | Correlation Coefficient | P-value    |
++============+============+=========================+============+
+| C          | 0.36 ± 0.1 | -0.51                   | \< 2e-16   |
++------------+------------+-------------------------+------------+
+| Mn         | 0.79 ± 0.3 | -0.032                  | \< 2e-16   |
++------------+------------+-------------------------+------------+
+| Ni         | 1.55 ± 0.5 | -0.0255                 | \< 2e-16   |
++------------+------------+-------------------------+------------+
+| Si         | 0.35 ± 0.2 | -0.0226                 | 4.48E-13   |
++------------+------------+-------------------------+------------+
+| Cr         | 1.04 ± 0.7 | -0.0175                 | \< 2e-16   |
++------------+------------+-------------------------+------------+
+| C:Mn       | N/A        | -0.0751                 | \< 2e-16   |
++------------+------------+-------------------------+------------+
+| C:Ni       | N/A        | -0.0154                 | 1.01E-11   |
++------------+------------+-------------------------+------------+
 
 #### The model is:
 

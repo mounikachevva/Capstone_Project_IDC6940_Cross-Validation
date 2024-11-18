@@ -1,0 +1,827 @@
+---
+title: "Prediction of Martensite Start Temperature in Steels Using Cross Validation"
+author: "Mounika Chevva, Hooman Sabarou(Advisor: Dr. Samantha Seals)"
+date: 'today'
+execute:
+  echo: true
+  warning: false
+  message: false
+  error: false
+  
+format: 
+  revealjs:
+    theme: serif
+    embed-resources: true
+    slide-number: true
+    width: 2000
+    height: 1000
+    df-print: paged
+    scrollable: true
+    html-math-method: katex
+    bibliography: references.bib 
+editor: source
+pdf-separate-fragments: true
+fig-align: center
+
+self-contained: true
+
+---
+
+## Introduction 
+
+#### Cross-validation Overview
+
+- A statistical technique for evaluating the performance and generalizability of machine learning models.
+
+- Divides dataset into training and validation subsets.
+
+- Ensures model training on one subset and validation on another.
+
+#### Advantages:
+
+- Provides more reliable estimates of model performance.
+
+- Reduces bias compared to a single train-test split.
+
+- Improves model generalizability by leveraging different training and validation data.
+
+
+## Methods
+
+- K-Fold Cross-Validation: Dataset is split into $k$ folds, model is trained on $k-1$ folds and validated on the remaining fold, repeated $k$ times @Kohavi1995.
+
+- Leave-One-Out Cross-Validation (LOOCV): A special case of K-Fold where $k$ equals the number of observations, each sample serves as the validation set once.
+
+- Nested Cross-Validation: Used for model selection and hyperparameter tuning, an outer loop for validation and an inner loop for training and hyperparameter optimization.
+
+## Model Measures of Error (MOE)
+
+- Definition: Measures of Error (MOE) quantify the difference between predicted values and actual outcomes, helping assess model performance.
+
+::: {.panel-tabset}
+
+#### Mean Absolute Error (MAE):
+
+- Measures the average absolute errors between predicted and actual values @willmott2005advantages..
+
+$$
+\text{MAE} = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|
+$$
+
+where $y_i$ is the actual value, $\hat{y}_i$ is the predicted value,and $n$ is the total number of observations.
+
+#### Root Mean Squared Error (RMSE):
+
+- The square root of the MSE, providing error in the same units as the target variable @chai2014root.
+
+$$RMSE = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2}$$
+
+where $y_i$ is the observed value, $\hat{y}_i$ is the predicted value,and $n$ is the total number of observations.
+
+
+####  R-squared (R²)
+
+- Represents the proportion of variance in the dependent variable that can be explained by the independent variables @draper1998applied.
+
+$$
+R^2 = 1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}
+$$
+where $\bar{y}$ is the mean of the actual values.
+
+:::
+
+
+## Cross Validation Methods
+
+::: {.panel-tabset}
+
+### K-Fold Cross-Validation 
+
+1. **Divide the dataset** \(D\) into \(K\) equally sized subsets (folds).
+
+2. **For each fold** \(k\) (where \(k = 1, 2, \ldots, K\)):
+   - Train the model \(M\) on the \(K - 1\) folds and validate it on the \(k\)-th fold.
+   - Calculate the performance metric \(P_k\) (e.g., accuracy, MAE) on the \(k\)-th fold.
+
+3. **The overall performance metric** is then averaged over all \(K\) folds:
+
+$$
+\text{CV}(M) = \frac{1}{K} \sum_{k=1}^{K} P_k
+$$
+
+###  Leave-One-Out Cross-Validation (LOOCV)
+
+1. **Divide the dataset** \(D\) into \(n\) subsets (where \(n\) is the number of observations).
+
+2. **For each observation** \(i\) (where \(i = 1, 2, \ldots, n\)):
+   - Train the model \(M\) on the remaining \(n - 1\) observations.
+   - Validate the model on the \(i\)-th observation.
+   - Calculate the performance metric \(P_i\) (e.g., accuracy, MAE) on the \(i\)-th observation.
+
+3. **The overall performance metric** is then averaged over all \(n\) observations:
+
+$$
+\text{LOOCV}(M) = \frac{1}{n} \sum_{i=1}^{n} P_i
+$$
+
+### Nested Cross-Validation (Nested CV)
+
+1. **Outer Loop**:
+   - Divide the dataset \(D\) into \(K\) outer folds.
+   - For each outer fold \(k\) (where \(k = 1, 2, \ldots, K\)):
+     - Reserve the \(k\)-th fold as the validation set.
+     - Use the remaining \(K - 1\) folds as the training set.
+
+2. **Inner Loop**:
+   - For each training set from the outer loop, perform \(M\) inner folds:
+     - Divide the training set into \(M\) inner folds.
+     - For each inner fold \(j\) (where \(j = 1, 2, \ldots, M\)):
+       - Train the model \(M\) on the \(M - 1\) inner folds.
+       - Validate it on the \(j\)-th inner fold.
+       - Calculate the performance metric \(P_{kj}\) on the \(j\)-th inner fold.
+
+3. **Performance Metrics**:
+   - Average the inner loop performance metrics for each outer fold:
+   
+   $$
+   \text{Inner CV}(M) = \frac{1}{M} \sum_{j=1}^{M} P_{kj}
+   $$
+   
+   - The overall performance metric of the model is averaged over all outer folds:
+   
+   $$
+   \text{Nested CV}(M) = \frac{1}{K} \sum_{k=1}^{K} \text{Inner CV}(M)
+   $$
+
+:::
+
+## Introduction to the Dataset {.smaller}
+
+**Martensite Starting Temperature**
+
+- Materials Science Dataset about Steel
+- Martensite Starting Temperature (**Ms** in degree Celsius) & chemical elements (weight percent)
+- Depending on the chemistry of a steel, **Ms** changes
+- It is important as it controls strength of Steel
+- The data has 16 variables for 1543 observations
+
+**Application**
+
+<div style="text-align: center;">
+  <img src="/Users/hoomansabarou/Downloads/1699901348769.jpeg" style="width: 65%; position: absolute; left: 0; opacity: 1;" class="fragment fade-in">
+</div>
+
+
+## Data Exploration and Visualization
+
+
+
+In our study, we analyzed a dataset from @wentzien2024machine Martensite dataset focuses on predicting the Martensite Start Temperature (Ms) in steel alloys based on their chemical compositions. 
+
+- Martensite start temperature (Ms) is  target variable.
+- "C","Mn","Si","Cr","Ni" are Predictor variables
+```{r correlation-matrix, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Correlation_Matrix"}
+library(ggplot2)
+library(reshape2)
+library(corrplot)
+Martensite <- read.csv("/Users/hoomansabarou/Github/Capstone_Project_Rstudio/Choosing Dataset/Martensite/Mounika Slides/Martensite Start-Temp.csv")
+correlation_matrix <- cor(Martensite, use = "complete.obs")
+
+#print(correlation_matrix)
+
+corr_plot <- corrplot(correlation_matrix, method = "circle")
+
+
+```
+
+
+## Modeling and Results
+
+### Linear Regression Model
+
+Linear regression is a fundamental statistical technique that establishes a relationship between a dependent variable and one or more independent variables by fitting a linear equation to observed data.
+
+In our dataset, which focuses on predicting the Martensite Start Temperature (Ms) of steel based on its chemical composition (C, Mn, Si, Cr, Ni), linear regression allows us to quantify how changes in these elements influence Ms.
+
+
+ $$ M_s = \beta_0 +\beta_1 C +\beta_2 Mn + \beta_3 Si + \beta_4 Cr + \beta_5 Ni $$
+
+ 
+ $$M_s = 746.99 - 254.85 C - 24.24 Mn - 13.28 Si - 7.8 Cr - 14.64 Ni $$
+ 
+```{r Linear Regression Coefficients, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Linear Regression Coefficients"}
+library(caret)
+library(dplyr)
+library(knitr)
+
+library(tidyr)
+
+predictors <- Martensite[, c("C","Mn","Si","Cr","Ni")]
+target <- Martensite$Ms 
+data_combined <- data.frame(predictors, Ms = target)
+
+
+set.seed(123)
+trainIndex <- createDataPartition(data_combined$Ms, p = .8, list = FALSE, times = 1)
+train_data <- data_combined[trainIndex,]
+test_data <- data_combined[-trainIndex,]
+
+model_train <- train(Ms ~ C + Mn + Si + Cr + Ni, 
+               data = train_data, 
+               method = "lm")
+
+model_summary <- summary(model_train$finalModel)
+
+coefficients_table <- data.frame(
+  Term = rownames(model_summary$coefficients),
+  Estimate = model_summary$coefficients[, "Estimate"],
+  Std_Error = model_summary$coefficients[, "Std. Error"],
+  t_value = model_summary$coefficients[, "t value"],
+  p_value = model_summary$coefficients[, "Pr(>|t|)"]
+)
+rownames(coefficients_table) <- NULL
+
+kable(coefficients_table, caption = "Linear Regression Model Coefficients")
+```
+
+***Statistics***
+
+Residual standard error: 54.28 on 1230 degrees of freedom
+
+Multiple R-squared:  0.7433,
+
+Adjusted R-squared:  0.7422 
+
+F-statistic: 712.2 on 5 and 1230 DF,  
+
+p-value: < 2.2e-16
+
+
+## Cross Validation Results for Linear Regression
+
+The results of this analysis reveal that the models tested with 5-Fold Cross-Validation (5-Fold CV) and Leave-One-Out Cross-Validation (LOOCV) demonstrate impressive predictive accuracy. These two models consistently outshine the Nested CV model, indicating that they are more dependable for making predictions from the dataset.
+
+::: {.panel-tabset}
+
+### K-fold Cross-Validation
+
+```{r  K Fold Cross-Validation, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="K Fold Cross-Validation"}
+train_kfold <- trainControl(method = "cv", number = 5)
+
+model_kfold <- train(Ms ~ C + Mn + Si + Cr + Ni, 
+                     data = train_data, 
+                     method = "lm", 
+                     trControl = train_kfold)
+
+calculate_rmse <- function(actual, predicted) {
+  sqrt(mean((actual - predicted)^2))
+}
+
+calculate_mae <- function(actual, predicted) {
+  mean(abs(actual - predicted))
+}
+
+calculate_r2 <- function(actual, predicted) {
+  1 - sum((predicted - actual)^2) / sum((actual - mean(actual))^2)
+}
+
+kfold_predictions <- predict(model_kfold, newdata = test_data) 
+
+kfold_rmse <- calculate_rmse(test_data$Ms, kfold_predictions) %>% round(2)
+kfold_mae <- calculate_mae(test_data$Ms, kfold_predictions) %>% round(2)
+kfold_r2 <- calculate_r2(test_data$Ms, kfold_predictions) %>% round(2)
+
+Measure_of_Error <- c("RMSE", "MAE", "R2")
+Result_Value <- c(kfold_rmse, kfold_mae, kfold_r2)
+kfold_df <- data.frame(Measure_of_Error, Result_Value) 
+
+kfold_df %>% kable()
+
+
+
+```
+
+### LOOCV Cross-Validation
+
+```{r LOOCV Cross-Validation, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="LOOCV Cross-Validation"}
+
+
+train_control_loocv <- trainControl(method = "LOOCV")
+
+model_loocv <- train(Ms ~ C + Mn + Si + Cr + Ni, 
+                     data = train_data, 
+                     method = "lm", 
+                     trControl = train_control_loocv)
+
+loocv_predictions <- predict(model_loocv, newdata = test_data)
+
+loocv_rmse <- calculate_rmse(test_data$Ms, loocv_predictions) %>% round(2)
+loocv_mae <- calculate_mae(test_data$Ms, loocv_predictions) %>% round(2)
+loocv_r2 <- calculate_r2(test_data$Ms, loocv_predictions) %>% round(2)
+
+Measure_of_Error <- c("RMSE", "MAE", "R2")
+Result_Value <- c(loocv_rmse, loocv_mae, loocv_r2)
+loocv_df <- data.frame(Measure_of_Error, Result_Value) 
+
+
+loocv_df %>% kable()
+
+```
+### Nested Cross-Validation
+
+```{r Nested Cross-Validation, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Nested Cross-Validation"}
+
+set.seed(123)
+outer_train_control <- trainControl(method = "cv", number = 5)
+inner_train_control <- trainControl(method = "cv", number = 5)
+
+nested_model <- function(data, indices) {
+  train_data <- data[indices,]
+  test_data <- data[-indices,]
+  
+  model <- train(Ms ~ C + Mn + Si + Cr + Ni, 
+                 data = train_data, 
+                 method = "lm", 
+                 trControl = inner_train_control)
+  
+  predictions <- predict(model, newdata = test_data)
+  
+  rmse <- calculate_rmse(test_data$Ms, predictions)
+  mae <- calculate_mae(test_data$Ms, predictions)
+  r2 <- calculate_r2(test_data$Ms, predictions)
+  
+  return(c(rmse, mae, r2))
+}
+
+
+nested_cv_indices <- createFolds(data_combined$Ms, k = 5, list = TRUE, returnTrain = TRUE)
+
+
+nested_cv_results <- t(sapply(nested_cv_indices, nested_model, data = data_combined))
+
+nested_cv_rmse <- mean(nested_cv_results[, 1]) %>% round(2)
+nested_cv_mae <- mean(nested_cv_results[, 2]) %>% round(2)
+nested_cv_r2 <- mean(nested_cv_results[, 3]) %>% round(2)
+
+Measure_of_Error <- c("RMSE", "MAE", "R2")
+Result_Value <- c(nested_cv_rmse, nested_cv_mae, nested_cv_r2)
+nested_cv_df <- data.frame(Measure_of_Error, Result_Value)
+
+nested_cv_df %>% kable()
+
+
+
+```
+::: 
+
+
+## Support Vector Machines (SVM) for Regression (SVR)
+
+Support Vector Machines (SVM) are algorithms that model data by finding optimal boundaries, handling nonlinear patterns using kernels.
+Using our dataset, Support Vector Machines (SVM) with a radial kernel help predict the martensite start temperature (Ms) based on chemical elements like C, Mn, Ni, Si, and Cr. SVM works by finding the best way to capture the relationship between these variables, effectively handling complex patterns for accurate Ms predictions.
+
+::: {.panel-tabset}
+
+### SVM K-Fold Cross-Validation
+```{r SVM_K Fold Cross-Validation, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="SVM_K Fold Cross-Validation"}
+library(e1071)
+library(caret)
+
+set.seed(123) 
+
+
+predictors <- Martensite[, c("C","Mn","Si","Cr","Ni")]
+target <- Martensite$Ms 
+data_combined <- data.frame(predictors, Ms = target)
+
+
+trainIndex <- createDataPartition(data_combined$Ms, p = .8, list = FALSE, times = 1)
+train_data <- data_combined[trainIndex,]
+test_data <- data_combined[-trainIndex,]
+
+svr_model <- train(Ms ~ C + Mn + Si + Cr + Ni, 
+                   data = train_data, 
+                   method = "svmRadial")  
+
+
+train_kfold <- trainControl(method = "cv", number = 5)
+
+svr_model <- train(Ms ~ C + Mn + Si + Cr + Ni, 
+                   data = train_data, 
+                   method = "svmRadial",
+                   trControl = train_kfold)
+
+svr_kfold_predictions <- predict(svr_model, newdata = test_data)
+
+calculate_rmse <- function(actual, predicted) {
+  sqrt(mean((actual - predicted)^2))
+}
+
+calculate_mae <- function(actual, predicted) {
+  mean(abs(actual - predicted))
+}
+
+calculate_r2 <- function(actual, predicted) {
+  cor(actual, predicted)^2
+}
+
+svr_kfold_rmse <- calculate_rmse(test_data$Ms, svr_kfold_predictions) %>% round(2)
+svr_kfold_mae <- calculate_mae(test_data$Ms, svr_kfold_predictions) %>% round(2)
+svr_kfold_r2 <- calculate_r2(test_data$Ms, svr_kfold_predictions) %>% round(2)
+
+Measure_of_Error <- c("RMSE", "MAE", "R2")
+Result_Value <- c(svr_kfold_rmse, svr_kfold_mae, svr_kfold_r2)
+svm_kfold_df <- data.frame(Measure_of_Error, Result_Value) 
+
+svm_kfold_df %>% kable()
+
+
+```
+
+
+### SVM LOOCV Cross-Validation
+
+```{r SVM_LOOCV Cross-Validation, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="SVM_LOOCV Cross-Validation"}
+library(e1071)
+library(caret)
+library(dplyr)
+library(knitr)
+
+set.seed(123)
+
+train_loocv <- trainControl(method = "LOOCV")
+
+model_loocv <- train(Ms ~ C + Mn + Si + Cr + Ni, 
+                     data = train_data, 
+                     method = "svmLinear",  
+                     trControl = train_loocv)
+
+loocv_predictions <- predict(model_loocv, newdata = test_data)
+
+loocv_rmse <- sqrt(mean((test_data$Ms - loocv_predictions)^2)) %>% round(2) 
+loocv_mae <- mean(abs(test_data$Ms - loocv_predictions)) %>% round(2) 
+loocv_r2 <- cor(test_data$Ms, loocv_predictions)^2 %>% round(2) 
+
+Measure_of_Error <- c("RMSE", "MAE", "R2")
+Result_Value <- c(loocv_rmse, loocv_mae, loocv_r2)
+svm_loocv_df <- data.frame(Measure_of_Error, Result_Value) 
+
+kable(svm_loocv_df)
+
+
+```
+
+### SVM Nested Cross-Validation
+
+```{r SVM_Nested Cross-Validation, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="SVM_Nested Cross-Validation"}
+set.seed(123)
+
+outer_train_control <- trainControl(method = "cv", number = 5)
+
+inner_train_control <- trainControl(method = "cv", number = 5)
+
+nested_svm <- function(data, indices) {
+  train_data <- data[indices,]
+  test_data <- data[-indices,]
+
+
+ model <- train(Ms ~ C + Mn + Si + Cr + Ni, 
+                 data = train_data, 
+                 method = "svmRadial", 
+                 trControl = inner_train_control,
+                 tuneLength = 3) 
+   predictions <- predict(model, newdata = test_data)
+rmse <- sqrt(mean((test_data$Ms - predictions)^2))
+  mae <- mean(abs(test_data$Ms - predictions))
+  r2 <- cor(test_data$Ms, predictions)^2
+  
+  return(c(rmse, mae, r2))
+}
+
+nested_cv_indices <- createFolds(data_combined$Ms, k = 5, list = TRUE, returnTrain = TRUE)
+
+nested_cv_results <- t(sapply(nested_cv_indices, nested_svm, data = data_combined))
+
+nested_cv_rmse <- mean(nested_cv_results[, 1]) %>% round(2)
+nested_cv_mae <- mean(nested_cv_results[, 2]) %>% round(2)
+nested_cv_r2 <- mean(nested_cv_results[, 3]) %>% round(2)
+
+Measure_of_Error <- c("RMSE", "MAE", "R2")
+Result_Value <- c(nested_cv_rmse, nested_cv_mae, nested_cv_r2)
+svm_nested_cv_df <- data.frame(Measure_of_Error, Result_Value)
+
+kable(svm_nested_cv_df)
+
+
+```
+
+::: 
+
+## Model Comparision Results
+
+In this study, we compared the performance of Linear Regression and Support Vector Machine (SVM) models in predicting the martensite start temperature (Ms). Using 5-fold cross-validation, we found that SVM outperformed Linear Regression, achieving a lower MAE (~21 vs ~33), a higher R² (~0.9 vs ~0.55), and a lower RMSE (~25 vs ~48), highlighting its superior accuracy and reliability in making predictions.
+
+```{r Model Comparision Results, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Model Comparision Results" }
+
+library(tidyr)
+
+kfold_results  <- kfold_df %>% mutate(Method = "5-Fold") 
+LOOCV_results  <- loocv_df %>% mutate(Method = "LOOCV")
+nested_results <- nested_cv_df %>% mutate(Method = "Nested CV") 
+
+
+result_long_df <- combine(kfold_results, LOOCV_results, nested_results)
+
+Comparison_df <- rbind(
+  Regression_R <- cbind(result_long_df, c(replicate(length(result_long_df),"Linear_Regression"))) %>% rename(Model=4),
+  
+  
+
+SVM_KFold_R <- svm_kfold_df %>% mutate(Method = "5-Fold", Model = "SVM"),
+ SVM_LOOCV_R <- svm_loocv_df %>% mutate(Method = "LOOCV", Model = "SVM"),
+ SVM_Nest_R  <- svm_nested_cv_df %>% mutate(Method = "Nested CV", Model = "SVM")
+  ) 
+
+Comparison_df %>% 
+  pivot_wider(names_from = Model, values_from = Result_Value) %>% 
+  relocate(Method) %>% 
+  kable()
+
+```
+
+## Model Comparision Plot
+
+```{r Model Comparision Results Plot, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Model Comparision Results Plot"}
+
+library(ggplot2)
+library(dplyr)
+
+kfold_linear_df <- kfold_df %>% mutate(Model = "Linear Regression")
+kfold_svm_df <- svm_kfold_df %>% mutate(Model = "SVM")
+
+comparison_df <- bind_rows(kfold_linear_df, kfold_svm_df)
+
+comparison_plot <- ggplot(comparison_df, aes(x = Measure_of_Error, y = Result_Value, color = Model, group = Model)) +
+  geom_line(size = 1.2) +                   
+  geom_point(size = 3) +                  
+  labs(title = "Model Comparison: Linear Regression vs SVM (K-Fold CV, k=5)",
+       y = "Performance Metric Value",
+       x = "Performance Metric") +
+  theme_minimal() +
+  theme(legend.title = element_blank())    
+
+print(comparison_plot)
+
+ggsave(filename = "model_comparison_plot.png", plot = comparison_plot, width = 8, height = 6, dpi = 400)
+
+```
+## Methodology-Hooman {.smaller}
+  
+- **Modeling Approach**:
+  + Untransformed Model: Directly modeled Ms using predictors like C, Mn, Ni, Si, Cr, with interaction terms. 
+  + Log-Transformed Model: Modeled log(Ms) to handle non-normality and stabilize variance, using the same predictors and interaction terms.
+
+  + Model Improvements (Predictors' Removal, Introducing Interaction Parameters, Outliers' Removal)
+
+  + Model Diagnostics (ANOVA, AIC, Cross-Validation, Check for Multicollinearity, Influential Points' Removal)
+
+  + Model Evaluation:
+The log-transformed model showed significantly better performance with a lower AIC and cross-validation MSE.
+Residual deviance and cross-validation confirmed that the log model generalized better to unseen data.
+- **Cross-Validation Refinement**:
+  + K-Fold Cross-Validation with More Folds
+  + Leave-One-Out Cross-Validation (LOOCV) 
+- Programing has been done by R [@R] in Rstudio (version 2024.04.2) 
+- Utilized packages: tidyverse [@tidyverse], classpackage [@classpackage], 
+ggplot2 [@gg], psych [@psych], and boot [@boot1,@boot2]
+
+## Models
+
+  + First Model:
+
+$Ms = 769.41 -286.71 C -16.42 Mn -14.04 Ni - 13.89 Si - 10.13Cr -41.45C:Mn - 8.36 C:Ni$
+
+<style type="text/css">
+.tg {
+  border-collapse: collapse;
+  width: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.tg th {
+  background-color: #f4f4f4;
+  text-align: left;
+  padding: 10px;
+  border-bottom: 2px solid #ddd;
+  font-weight: bold;
+}
+
+.tg td {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+.tg tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+</style>
+
+<table class="tg">
+  <tr>
+    <th>Variables</th>
+    <th>Mean ± SD</th>
+    <th>Correlation Coefficient</th>
+    <th>P-value</th>
+  </tr>
+  <tr>
+    <td>C</td>
+    <td>0.36 ± 0.1</td>
+    <td>-286.71</td>
+    <td>&lt; 2e-16</td>
+  </tr>
+  <tr>
+    <td>Mn</td>
+    <td>0.79 ± 0.3</td>
+    <td>-16.42</td>
+    <td>1.36E-13</td>
+  </tr>
+  <tr>
+    <td>Ni</td>
+    <td>1.55 ± 0.5</td>
+    <td>-14.04</td>
+    <td>&lt; 2e-16</td>
+  </tr>
+  <tr>
+    <td>Si</td>
+    <td>0.35 ± 0.2</td>
+    <td>-13.89</td>
+    <td>1.70E-13</td>
+  </tr>
+  <tr>
+    <td>Cr</td>
+    <td>1.04 ± 0.7</td>
+    <td>-10.13</td>
+    <td>&lt; 2e-16</td>
+  </tr>
+  <tr>
+    <td>C:Mn</td>
+    <td>N/A</td>
+    <td>-41.45</td>
+    <td>&lt; 2e-16</td>
+  </tr>
+  <tr>
+    <td>C:Ni</td>
+    <td>N/A</td>
+    <td>-8.36</td>
+    <td>9.68E-10</td>
+  </tr>
+</table>
+
+
+
+## Models
+
+  + Second Model:
+
+$log(Ms) = -6.69 - 0.51C - 0.03 Mn - 0.03 Ni - 0.03 Si - 0.02Cr - 0.07 C:Mn - 0.01C:Ni$
+
+<style type="text/css">
+.tg {
+  border-collapse: collapse;
+  width: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.tg th {
+  background-color: #f4f4f4;
+  text-align: left;
+  padding: 10px;
+  border-bottom: 2px solid #ddd;
+  font-weight: bold;
+}
+
+.tg td {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+.tg tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+</style>
+
+<table class="tg">
+  <tr>
+    <th>Variables</th>
+    <th>Mean ± SD</th>
+    <th>Correlation Coefficient</th>
+    <th>P-value</th>
+  </tr>
+  <tr>
+    <td>C</td>
+    <td>0.36 ± 0.1</td>
+    <td>-0.51</td>
+    <td>&lt; 2e-16</td>
+  </tr>
+  <tr>
+    <td>Mn</td>
+    <td>0.79 ± 0.3</td>
+    <td>-0.032</td>
+    <td>&lt; 2e-16</td>
+  </tr>
+  <tr>
+    <td>Ni</td>
+    <td>1.55 ± 0.5</td>
+    <td>-0.0255</td>
+    <td>&lt; 2e-16</td>
+  </tr>
+  <tr>
+    <td>Si</td>
+    <td>0.35 ± 0.2</td>
+    <td>-0.0226</td>
+    <td>4.48E-13</td>
+  </tr>
+  <tr>
+    <td>Cr</td>
+    <td>1.04 ± 0.7</td>
+    <td>-0.0175</td>
+    <td>&lt; 2e-16</td>
+  </tr>
+  <tr>
+    <td>C:Mn</td>
+    <td>N/A</td>
+    <td>-0.0751</td>
+    <td>&lt; 2e-16</td>
+  </tr>
+  <tr>
+    <td>C:Ni</td>
+    <td>N/A</td>
+    <td>-0.0154</td>
+    <td>1.01E-11</td>
+  </tr>
+</table>
+
+
+
+## Model Performance Summary
+
+| **Model**           | **Cross-Validation** | **RMSE** | **MAE** | **R²**  |
+|----------------------|----------------------|----------|---------|---------|
+| First Model    | 5-Fold              | 27.79    | 20.43   | 0.90    |
+| Second Model            | 5-Fold              | 0.05     | 18.28   | 0.91    |
+| First Model     | LOOCV               | 27.80    | 20.43   | 0.90    |
+| Second Model            | LOOCV               | 0.05     | 22.02   | 0.91    |
+
+### Summary
+
+<div style="font-size: 0.7em;">
+
+### Model Choice: 
+
++ The Log Model slightly outperforms the Regression Model in terms of RMSE and $R^2$, indicating better fit and prediction accuracy on the logarithmic scale. For tasks requiring high precision and smaller errors, the log model is preferable.
+  
+### Cross-Validation Choice: 
+
++ **5-Fold**: Offers slightly lower MAE and RMSE, indicating better stability when training on subsets of the data.
+
++ **LOOCV**: Is slightly more sensitive to data variations but confirms consistent results with 5-Fold.
+  
+### Conclusion: 
+
++ Use the Log Model for predictions.
++ Rely on 5-Fold Cross-Validation for performance evaluation due to its computational efficiency and similar results to LOOCV.
+
+</div>
+
+
+## Conclusion: Overview
+
+### Evaluation of Two Models:
+
+Linear Regression Model
+
+Support Vector Machine Model
+
+### Cross-validation Methods Used:
+
+k-fold Cross-validation
+
+Leave-one-out Cross-validation (LOOCV)
+
+Nested Cross-validation
+
+## Conclusion: Key Findings
+
+- Mean Absolute Error (MAE): SVM performed much better, with a lower MAE (~21) compared to Linear Regression (~33), meaning SVM’s predictions were closer to the actual values.
+
+- R-squared (R²): SVM showed a significantly higher R² (~0.9) than Linear Regression (~0.55), indicating that SVM explained 90% of the data’s variability, while Linear Regression only accounted for about 55%.
+
+- Root Mean Squared Error (RMSE): SVM had a much lower RMSE (~25) compared to Linear Regression (~48), which reflects its greater accuracy and fewer large prediction errors.
+
+- Overall Performance: Across all key metrics, SVM outperformed Linear Regression, proving to be a more accurate and reliable model for predicting martensite start temperature (Ms).
+
+
+
+## References
