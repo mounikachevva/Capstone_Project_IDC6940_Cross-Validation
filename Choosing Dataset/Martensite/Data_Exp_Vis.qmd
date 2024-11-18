@@ -1,0 +1,508 @@
+---
+title: "Martensite Starting Temperature"
+author: "Hooman Sabarou-Cross_Validation Group_Fall 2024"
+editor: visual
+format: html
+
+self-constrainded: true
+echo: FALSE
+---
+
+### Introduction to the Dataset (Martensite Starting Temperature)
+
+This dataset contains the chemical compositions of various steels along with their Martensite starting temperatures (Ms), aiming to develop a model that predicts Ms based on steel chemistry.
+
+Martensite is a phase where steel becomes extremely strong and can withstand high stresses, making it essential for industries like automotive to enhance crash safety. Ms is the critical temperature where steel’s internal structure changes into Martensite, and it varies with chemical composition. Currently, determining Ms requires lengthy tests using Thermogravimetry (TGA), which are prone to errors and often need repeating. A predictive model would save significant time and effort by eliminating the need for these tests.
+
+### The head of the dataset
+
+```{r}
+# Load the dataset
+dataset <- read.csv("/Users/hoomansabarou/Downloads/Martensite Start-Temp.csv")
+head(dataset)
+
+```
+
+C, Mn, Si, Cr, and etc. are referred to chemical elements based on Periodic Table. They are Carbon, Manganese, Silicon, Chromium and so on.
+
+### Checking for missing values
+
+```{r}
+# Check for missing values
+sum(is.na(dataset))
+
+```
+
+There are no missing values.
+
+### Checking the structure of the dataset
+
+```{r}
+# Check the structure of the dataset
+str(dataset)
+
+```
+
+The dataset has 1543 observations and 16 variables. Ms represent Martensite starting temperature and is the dependent variable.
+
+The variables have continuous numeric content.
+
+### Summary statistics of the dataset
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Plot histograms for the variables using ggplot
+library(tidyverse)
+dataset %>%
+  gather(key = "Variable", value = "Value", Ms, C, Mn, Ni, Si, Cr) %>%
+  ggplot(aes(x = Value)) +
+  geom_histogram(fill = "lightblue", color = "black", bins = 30) +
+  facet_wrap(~Variable, scales = "free", ncol = 3) +
+  labs(title = "Distribution of Key Variables", x = "Value", y = "Frequency") +
+  theme_minimal()
+
+```
+
+Ms is ranged between 150 to 800 degree Celsius. However, the most of the data are in 350 to 800 degree Celsius. The model may be designed for a limited range of temperature where we have more data (350 to 800C).
+
+Carbon (C) has some zero contents which does not make any sense. Steel means Iron + Carbon. Iron without Carbon is not steel. C rows with zero content should be removed.
+
+```{r}
+# # Summary statistics of the dataset
+# summary(dataset)
+
+```
+
+```{r}
+# # Correlation between variables
+# cor_matrix <- cor(dataset)
+# cor_matrix
+
+```
+
+### Scatter plot for one element and Martensite starting temperature
+
+```{r}
+# Scatter plot for Carbon content vs Martensite Start Temperature 
+dataset %>%
+  ggplot(aes(x = C, y = Ms)) +
+  geom_point(color = "blue", size = 2, alpha = 0.7) +
+  labs(title = "Carbon Content vs Martensite Start Temperature", 
+       x = "Carbon Content (Wt.%)", 
+       y = "Martensite Start Temperature (Ms)") +
+  theme_minimal()
+
+```
+
+Carbon rows with zero content are recognized.
+
+### Histogram of Martensite starting temperature
+
+```{r}
+# Plot histogram of Ms (Martensite start temperature)
+hist(dataset$Ms, 
+     main = "Distribution of Martensite Start Temperature (Ms)", 
+     xlab = "Martensite Start Temperature (Ms)", 
+     col = "lightblue", 
+     border = "black", 
+     breaks = 30)
+
+```
+
+### Filtering the dataset for temperatures between 300 to 800 degree Celsius
+
+```{r}
+# Filter the dataset for Ms between 300°C and 800°C
+filtered_dataset <- subset(dataset, Ms >= 300 & Ms <= 800)
+
+```
+
+```{r}
+hist(filtered_dataset$Ms, 
+     main = "Distribution of Martensite Start Temperature (Ms)", 
+     xlab = "Martensite Start Temperature (Ms)", 
+     col = "lightblue", 
+     border = "black", 
+     breaks = 30)
+```
+
+### Building GLM models
+
+1.  Previous knowledge in Materials Science has been utilized to select important predictors. I am not sure if this is a correct approach.
+
+```{r}
+# Build the updated GLM model using filtered data
+updated_model <- glm(Ms ~ C + Ni + Mn + Mo + Si + Cr + V + Co, data = filtered_dataset, family = gaussian)
+
+# Summarize the updated model
+summary(updated_model)
+
+```
+
+At the first glance, V and Co present weak predictors. These two have to be removed.
+
+### Checking residuals
+
+```{r}
+# Check residuals with a QQ plot
+qqnorm(residuals(updated_model))
+qqline(residuals(updated_model), col = "red")
+
+# Histogram of residuals
+hist(residuals(updated_model), main = "Residuals Distribution", xlab = "Residuals")
+
+
+```
+
+Q-Q plot shows deviations for extreme values.
+
+Residual Distribution is skewed.
+
+### Identifying outliers
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Identify outliers
+outlier_residuals <- which(abs(residuals(updated_model)) > 2 * sd(residuals(updated_model)))
+dataset[outlier_residuals, ]
+
+```
+
+### Remove rows where Carbon content is zero, update the model, and the summary of the model. 
+
+2.  The model has been updated after removing zero cells for Carbon content.
+
+```{r}
+# Remove rows where C is 0
+filtered_dataset_no_C0 <- subset(filtered_dataset, C != 0)
+
+# Build the updated GLM model using the filtered data
+updated_model_no_C0 <- glm(Ms ~ C + Ni + Mn + Mo + Si + Cr + V + Co, data = filtered_dataset_no_C0, family = gaussian)
+
+# Summarize the updated model
+summary(updated_model_no_C0)
+
+```
+
+### Updating the model by removing Mo and Co and adding an interaction parameter between Carbon and Manganese.
+
+3.  The model has been updated after removing weak predictors.
+
+```{r}
+# Update the GLM model by removing Co and Mo, and adding an interaction between C and Mn
+updated_model_interaction <- glm(Ms ~ C * Mn + Ni + Si + Cr + V, 
+                                 data = filtered_dataset_no_C0, family = gaussian)
+
+# Summarize the updated model
+summary(updated_model_interaction)
+
+```
+
+### Update the model by removing V and add an interaction parameter between Carbon and Nickel. 
+
+4.  Further revision in the model by removing a weak parameter and adding a new interaction parameter
+
+```{r}
+# Update the model: remove V, and add interaction between C and Ni
+updated_model_C_Ni_interaction <- glm(Ms ~ C * Mn + C * Ni + Si + Cr, 
+                                      data = filtered_dataset_no_C0, 
+                                      family = gaussian)
+
+# Summarize the updated model
+summary(updated_model_C_Ni_interaction)
+
+```
+
+### Log Model
+
+After reviewing Q-Q plot and its deviations in extreme values and a skewed residual distribution, a log model has been considered. It will be compared with the first model at the end.
+
+```{r}
+log_model<- glm(formula = log(Ms) ~ C * Mn + C * Ni + Si + Cr, family = gaussian, data = filtered_dataset_no_C0)
+
+```
+
+### Performing ANOVA for the updated model. 
+
+```{r}
+library(classpackage)
+# Perform ANOVA on the updated model
+anova_check(updated_model_C_Ni_interaction)
+
+```
+
+### Performing ANOVA for the Log Model
+
+```{r}
+anova_check(log_model)
+```
+
+```{r}
+# library(glmtoolbox)
+# (adjR2(updated_model_C_Ni_interaction))
+```
+
+### Checking leverage and influential points for both models
+
+```{r}
+cooks(updated_model_C_Ni_interaction)
+```
+
+```{r}
+cooks(log_model)
+```
+
+### Investigate the influential points
+
+```{r}
+# Investigate the influential points
+influential_points <- c(1081, 685, 686)
+filtered_dataset_no_C0[influential_points, ]
+
+
+```
+
+By reviewing Carbon and Chromium contents, it can be decided that these three points are not representing routine chemistries for steels. They are unusual, and they can be removed.
+
+### Remove influential points and updating models
+
+```{r}
+# Remove the influential points
+filtered_dataset_no_influential <- filtered_dataset_no_C0[-c(1081, 685, 686), ]
+
+# Rebuild the model after removing the influential points
+updated_model_no_influential <- glm(Ms ~ C * Mn + C * Ni + Si + Cr, 
+                                    data = filtered_dataset_no_influential, 
+                                    family = gaussian)
+
+# Summarize the updated model
+summary(updated_model_no_influential)
+
+```
+
+```{r}
+# Rebuild the model after removing the influential points
+log_model_no_influential <- glm(formula = log(Ms) ~ C * Mn + C * Ni + Si + Cr, family = gaussian, data = filtered_dataset_no_influential)
+
+# Summarize the updated model
+summary(log_model_no_influential)
+
+
+
+
+```
+
+### Investigate points found out by Cook's distances
+
+```{r}
+# Investigate the observations with moderate Cook's Distance
+moderate_influential_points <- c(1132, 1188, 1061)
+filtered_dataset_no_C0[moderate_influential_points, ]
+
+```
+
+These observation are valid and will be kept in the dataset.
+
+### Apply the residuals check to the filtered dataset
+
+```{r}
+# Apply the residuals check to the correct dataset (filtered_dataset_no_influential)
+filtered_dataset_no_influential <- filtered_dataset_no_influential %>% 
+  mutate(outlier = if_else(abs(rstandard(updated_model_no_influential)) > 2.5, 
+                           "Suspected", "Not Suspected"))
+
+```
+
+### Counting Outliers
+
+```{r}
+
+filtered_dataset_no_influential %>% count(outlier)
+```
+
+### Plotting Carbon content with Martensite starting temprature
+
+```{r}
+library(ggplot2)
+filtered_dataset_no_influential %>% ggplot(aes(x = C, y = Ms, color = outlier)) +
+  geom_point() + 
+  scale_color_manual(values = c("#999999", "#000000")) +
+  labs(x = "Carbon", y = "Martensite Starting Temperature", color = "Outlier") +
+  theme_bw()
+```
+
+### Performing ANOVA for Both Models After Removing Influential Points
+
+```{r}
+anova_check(updated_model_no_influential)
+
+```
+
+```{r}
+anova_check(log_model_no_influential)
+```
+
+### Check Multicollinearity
+
+```{r}
+#Check Multicollinearity
+car::vif(updated_model_no_influential, type = "predictor")
+
+```
+
+```{r}
+car::vif(log_model_no_influential, type = "predictor")
+```
+
+There is no concerning level of multicollinearity for both models.
+
+### Remove Identified Outliers and Revise Both Models
+
+```{r}
+#Removing identified outliers
+filtered_dataset_no_influential_no_outlier <- filtered_dataset_no_influential %>% filter(outlier == "Not Suspected")
+
+updated_model_no_influential_2 <- glm(Ms ~ C * Mn + C * Ni + Si + Cr, 
+                                    data = filtered_dataset_no_influential_no_outlier, 
+                                    family = gaussian)
+
+summary(updated_model_no_influential_2)
+
+
+```
+
+### Performing ANOVA for the First Model After Removing Outliers
+
+```{r}
+anova_check(updated_model_no_influential_2)
+```
+
+### Checking Cook's Distance After Removing Outliers
+
+```{r}
+cooks(updated_model_no_influential_2)
+```
+
+### Log Model After Removing Outliers
+
+```{r}
+log_model_no_influential_no_outlier <- glm(formula = log(Ms) ~ C * Mn + C * Ni + Si + Cr, family = gaussian, data = filtered_dataset_no_influential_no_outlier)
+
+# Summarize the updated model
+summary(log_model_no_influential_no_outlier)
+```
+
+### Performing ANOVA for The Log Model After Removing Outliers
+
+```{r}
+anova_check(log_model_no_influential_no_outlier)
+```
+
+### Checking Cook's Distance
+
+```{r}
+cooks(log_model_no_influential_no_outlier)
+```
+
+### Table 1
+
+```{=html}
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-0lax{text-align:left;vertical-align:top}
+</style>
+```
+|     |       Ms      |       C        |       Mn       |       Ni       |       Si       |       Cr       |
+|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
+|     | Min.   :310.0 | Min.   :0.0016 | Min.   :0.0000 | Min.   : 0.000 | Min.   :0.0000 | Min.   : 0.000 |
+|     | 1st Qu.:553.5 | 1st Qu.:0.1600 | 1st Qu.:0.4700 | 1st Qu.: 0.000 | 1st Qu.:0.2000 | 1st Qu.: 0.000 |
+|     | Median :605.0 | Median :0.3300 | Median :0.6900 | Median : 0.150 | Median :0.2600 | Median : 0.520 |
+|     | Mean   :601.8 | Mean   :0.3617 | Mean   :0.7917 | Mean   : 1.558 | Mean   :0.3475 | Mean : 1.043   |
+|     | 3rd Qu.:670.0 | 3rd Qu.:0.4400 | 3rd Qu.:0.9700 | 3rd Qu.: 1.580 | 3rd Qu.:0.3400 | 3rd Qu.: 1.150 |
+|     | Max.   :784.0 | Max.   :1.4600 | Max.   :4.9500 | Max.   :27.200 | Max.   :3.8000 | Max.   :16.200 |
+
+```{r}
+write.csv(summary(filtered_dataset_no_influential_no_outlier[c("Ms", "C", "Mn", "Ni", "Si", "Cr")]), "NewTable.csv")
+```
+
+### Updated Summary for the Revised Dataset
+
+```{r}
+# Descriptive statistics summary for key variables
+summary(filtered_dataset_no_influential_no_outlier[c("Ms", "C", "Mn", "Ni", "Si", "Cr")])
+
+# Alternatively, for more detailed summaries including variance, skewness, etc.
+library(psych)
+describe(filtered_dataset_no_influential_no_outlier[c("Ms", "C", "Mn", "Ni", "Si", "Cr")])
+
+```
+
+### Histograms for Key Variables  for Revised Dataset
+
+```{r}
+# Plot histograms for key variables
+par(mfrow = c(2, 3))  # Set layout for 6 plots
+hist(filtered_dataset_no_influential_no_outlier$Ms, main = "Ms Distribution", xlab = "Ms", col = "lightblue")
+hist(filtered_dataset_no_influential_no_outlier$C, main = "Carbon (C) Distribution", xlab = "C", col = "lightgreen")
+hist(filtered_dataset_no_influential_no_outlier$Mn, main = "Manganese (Mn) Distribution", xlab = "Mn", col = "lightpink")
+hist(filtered_dataset_no_influential_no_outlier$Ni, main = "Nickel (Ni) Distribution", xlab = "Ni", col = "lightcoral")
+hist(filtered_dataset_no_influential_no_outlier$Si, main = "Silicon (Si) Distribution", xlab = "Si", col = "lightyellow")
+hist(filtered_dataset_no_influential_no_outlier$Cr, main = "Chromium (Cr) Distribution", xlab = "Cr", col = "lightgray")
+
+```
+
+### Cross-Validation
+
+#### 5-Fold
+
+```{r}
+
+library(boot)
+
+```
+
+### Cross-Validation for the First Model
+
+```{r}
+# Define the final model formula
+final_model_formula <- Ms ~ C * Mn + C * Ni + Si + Cr
+
+# Perform 5-fold cross-validation
+set.seed(123)  # Set seed for reproducibility
+cv_result <- cv.glm(data = filtered_dataset_no_influential_no_outlier, 
+                    glmfit = glm(final_model_formula, 
+                                 data = filtered_dataset_no_influential_no_outlier, 
+                                 family = gaussian), 
+                    K = 5)
+
+# Print cross-validation results
+print(cv_result$delta)  # Cross-validation error (raw and bias-corrected)
+
+```
+
+### Cross-Validation for the Second Model (Log Model)
+
+```{r}
+# Load required libraries
+#library(boot)
+
+
+# Define the log-transformed model
+log_model_no_influential_no_outlier <- glm(formula = log(Ms) ~ C * Mn + C * Ni + Si + Cr, 
+                                           family = gaussian, 
+                                           data = filtered_dataset_no_influential_no_outlier)
+
+# Perform 5-fold cross-validation using the `cv.glm` function from the `boot` package
+set.seed(42)  # for reproducibility
+cv_results <- cv.glm(data = filtered_dataset_no_influential_no_outlier, 
+                     glmfit = log_model_no_influential_no_outlier, 
+                     K = 5)
+
+# Print the cross-validation results
+print(cv_results$delta)
+
+
+
+```

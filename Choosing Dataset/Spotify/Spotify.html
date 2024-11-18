@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.555">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Spotify-EV-HS</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Spotify_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Spotify_files/libs/quarto-html/quarto.js"></script>
+<script src="Spotify_files/libs/quarto-html/popper.min.js"></script>
+<script src="Spotify_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Spotify_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Spotify_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Spotify_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Spotify_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Spotify_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Spotify_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Spotify-EV-HS</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(classpackage)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: ggplot2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: ggpubr</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: purrr</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: tidyr</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: dplyr</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>spotify_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"/Users/hoomansabarou/Github/Capstone_Project_Rstudio/Choosing Dataset/Spotify/Spotify Track Dataset.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>New names:
+• `` -&gt; `...1`</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 114000 Columns: 21
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (5): track_id, artists, album_name, track_name, track_genre
+dbl (15): ...1, popularity, duration_ms, danceability, energy, key, loudness...
+lgl  (1): explicit
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(spotify_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 21
+   ...1 track_id   artists album_name track_name popularity duration_ms explicit
+  &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;           &lt;dbl&gt;       &lt;dbl&gt; &lt;lgl&gt;   
+1     0 5SuOikwiR… Gen Ho… Comedy     Comedy             73      230666 FALSE   
+2     1 4qPNDBW1i… Ben Wo… Ghost (Ac… Ghost - A…         55      149610 FALSE   
+3     2 1iJBSr7s7… Ingrid… To Begin … To Begin …         57      210826 FALSE   
+4     3 6lfxq3CG4… Kina G… Crazy Ric… Can't Hel…         71      201933 FALSE   
+5     4 5vjLSffim… Chord … Hold On    Hold On            82      198853 FALSE   
+6     5 01MVOl9Kt… Tyrone… Days I Wi… Days I Wi…         58      214240 FALSE   
+# ℹ 13 more variables: danceability &lt;dbl&gt;, energy &lt;dbl&gt;, key &lt;dbl&gt;,
+#   loudness &lt;dbl&gt;, mode &lt;dbl&gt;, speechiness &lt;dbl&gt;, acousticness &lt;dbl&gt;,
+#   instrumentalness &lt;dbl&gt;, liveness &lt;dbl&gt;, valence &lt;dbl&gt;, tempo &lt;dbl&gt;,
+#   time_signature &lt;dbl&gt;, track_genre &lt;chr&gt;</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the dataset and suppress the column type messages</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>spotify_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"/Users/hoomansabarou/Github/Capstone_Project_Rstudio/Choosing Dataset/Spotify/Spotify Track Dataset.csv"</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>New names:
+• `` -&gt; `...1`</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop the `...1` column as it seems unnecessary</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>spotify_data <span class="ot">&lt;-</span> spotify_data[ , <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># View the structure again to confirm the changes</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(spotify_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tibble [114,000 × 20] (S3: tbl_df/tbl/data.frame)
+ $ track_id        : chr [1:114000] "5SuOikwiRyPMVoIQDJUgSV" "4qPNDBW1i3p13qLCt0Ki3A" "1iJBSr7s7jYXzM8EGcbK5b" "6lfxq3CG4xtTiEg7opyCyx" ...
+ $ artists         : chr [1:114000] "Gen Hoshino" "Ben Woodward" "Ingrid Michaelson;ZAYN" "Kina Grannis" ...
+ $ album_name      : chr [1:114000] "Comedy" "Ghost (Acoustic)" "To Begin Again" "Crazy Rich Asians (Original Motion Picture Soundtrack)" ...
+ $ track_name      : chr [1:114000] "Comedy" "Ghost - Acoustic" "To Begin Again" "Can't Help Falling In Love" ...
+ $ popularity      : num [1:114000] 73 55 57 71 82 58 74 80 74 56 ...
+ $ duration_ms     : num [1:114000] 230666 149610 210826 201933 198853 ...
+ $ explicit        : logi [1:114000] FALSE FALSE FALSE FALSE FALSE FALSE ...
+ $ danceability    : num [1:114000] 0.676 0.42 0.438 0.266 0.618 0.688 0.407 0.703 0.625 0.442 ...
+ $ energy          : num [1:114000] 0.461 0.166 0.359 0.0596 0.443 0.481 0.147 0.444 0.414 0.632 ...
+ $ key             : num [1:114000] 1 1 0 0 2 6 2 11 0 1 ...
+ $ loudness        : num [1:114000] -6.75 -17.23 -9.73 -18.52 -9.68 ...
+ $ mode            : num [1:114000] 0 1 1 1 1 1 1 1 1 1 ...
+ $ speechiness     : num [1:114000] 0.143 0.0763 0.0557 0.0363 0.0526 0.105 0.0355 0.0417 0.0369 0.0295 ...
+ $ acousticness    : num [1:114000] 0.0322 0.924 0.21 0.905 0.469 0.289 0.857 0.559 0.294 0.426 ...
+ $ instrumentalness: num [1:114000] 1.01e-06 5.56e-06 0.00 7.07e-05 0.00 0.00 2.89e-06 0.00 0.00 4.19e-03 ...
+ $ liveness        : num [1:114000] 0.358 0.101 0.117 0.132 0.0829 0.189 0.0913 0.0973 0.151 0.0735 ...
+ $ valence         : num [1:114000] 0.715 0.267 0.12 0.143 0.167 0.666 0.0765 0.712 0.669 0.196 ...
+ $ tempo           : num [1:114000] 87.9 77.5 76.3 181.7 119.9 ...
+ $ time_signature  : num [1:114000] 4 4 4 3 4 4 3 4 4 4 ...
+ $ track_genre     : chr [1:114000] "acoustic" "acoustic" "acoustic" "acoustic" ...</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for missing values across the dataset</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(spotify_data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        track_id          artists       album_name       track_name 
+               0                1                1                1 
+      popularity      duration_ms         explicit     danceability 
+               0                0                0                0 
+          energy              key         loudness             mode 
+               0                0                0                0 
+     speechiness     acousticness instrumentalness         liveness 
+               0                0                0                0 
+         valence            tempo   time_signature      track_genre 
+               0                0                0                0 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove rows with missing values in the specific columns</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>spotify_data_clean <span class="ot">&lt;-</span> spotify_data <span class="sc">%&gt;%</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(artists, album_name, track_name)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the dataset structure again to confirm</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(spotify_data_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tibble [113,999 × 20] (S3: tbl_df/tbl/data.frame)
+ $ track_id        : chr [1:113999] "5SuOikwiRyPMVoIQDJUgSV" "4qPNDBW1i3p13qLCt0Ki3A" "1iJBSr7s7jYXzM8EGcbK5b" "6lfxq3CG4xtTiEg7opyCyx" ...
+ $ artists         : chr [1:113999] "Gen Hoshino" "Ben Woodward" "Ingrid Michaelson;ZAYN" "Kina Grannis" ...
+ $ album_name      : chr [1:113999] "Comedy" "Ghost (Acoustic)" "To Begin Again" "Crazy Rich Asians (Original Motion Picture Soundtrack)" ...
+ $ track_name      : chr [1:113999] "Comedy" "Ghost - Acoustic" "To Begin Again" "Can't Help Falling In Love" ...
+ $ popularity      : num [1:113999] 73 55 57 71 82 58 74 80 74 56 ...
+ $ duration_ms     : num [1:113999] 230666 149610 210826 201933 198853 ...
+ $ explicit        : logi [1:113999] FALSE FALSE FALSE FALSE FALSE FALSE ...
+ $ danceability    : num [1:113999] 0.676 0.42 0.438 0.266 0.618 0.688 0.407 0.703 0.625 0.442 ...
+ $ energy          : num [1:113999] 0.461 0.166 0.359 0.0596 0.443 0.481 0.147 0.444 0.414 0.632 ...
+ $ key             : num [1:113999] 1 1 0 0 2 6 2 11 0 1 ...
+ $ loudness        : num [1:113999] -6.75 -17.23 -9.73 -18.52 -9.68 ...
+ $ mode            : num [1:113999] 0 1 1 1 1 1 1 1 1 1 ...
+ $ speechiness     : num [1:113999] 0.143 0.0763 0.0557 0.0363 0.0526 0.105 0.0355 0.0417 0.0369 0.0295 ...
+ $ acousticness    : num [1:113999] 0.0322 0.924 0.21 0.905 0.469 0.289 0.857 0.559 0.294 0.426 ...
+ $ instrumentalness: num [1:113999] 1.01e-06 5.56e-06 0.00 7.07e-05 0.00 0.00 2.89e-06 0.00 0.00 4.19e-03 ...
+ $ liveness        : num [1:113999] 0.358 0.101 0.117 0.132 0.0829 0.189 0.0913 0.0973 0.151 0.0735 ...
+ $ valence         : num [1:113999] 0.715 0.267 0.12 0.143 0.167 0.666 0.0765 0.712 0.669 0.196 ...
+ $ tempo           : num [1:113999] 87.9 77.5 76.3 181.7 119.9 ...
+ $ time_signature  : num [1:113999] 4 4 4 3 4 4 3 4 4 4 ...
+ $ track_genre     : chr [1:113999] "acoustic" "acoustic" "acoustic" "acoustic" ...</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load necessary libraries for visualization and correlation</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Registered S3 method overwritten by 'GGally':
+  method from   
+  +.gg   ggplot2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select the relevant columns for correlation analysis</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>spotify_subset <span class="ot">&lt;-</span> spotify_data_clean <span class="sc">%&gt;%</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(popularity, danceability, energy, loudness, tempo)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the correlation matrix</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggpairs</span>(spotify_subset)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Spotify_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot distributions for the relevant features</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(spotify_data_clean, <span class="fu">aes</span>(<span class="at">x =</span> popularity)) <span class="sc">+</span> </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span> </span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Distribution of Popularity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Spotify_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(spotify_data_clean, <span class="fu">aes</span>(<span class="at">x =</span> danceability)) <span class="sc">+</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="fl">0.05</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span> </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Distribution of Danceability"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Spotify_files/figure-html/unnamed-chunk-6-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(spotify_data_clean, <span class="fu">aes</span>(<span class="at">x =</span> energy)) <span class="sc">+</span> </span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="fl">0.05</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span> </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Distribution of Energy"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Spotify_files/figure-html/unnamed-chunk-6-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(spotify_data_clean, <span class="fu">aes</span>(<span class="at">x =</span> loudness)) <span class="sc">+</span> </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span> </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Distribution of Loudness"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Spotify_files/figure-html/unnamed-chunk-6-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(spotify_data_clean, <span class="fu">aes</span>(<span class="at">x =</span> tempo)) <span class="sc">+</span> </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">5</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span> </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Distribution of Tempo"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Spotify_files/figure-html/unnamed-chunk-6-5.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove rows where popularity is zero</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>spotify_data_clean <span class="ot">&lt;-</span> spotify_data_clean <span class="sc">%&gt;%</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(popularity <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the updated structure of the dataset</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(spotify_data_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tibble [97,980 × 20] (S3: tbl_df/tbl/data.frame)
+ $ track_id        : chr [1:97980] "5SuOikwiRyPMVoIQDJUgSV" "4qPNDBW1i3p13qLCt0Ki3A" "1iJBSr7s7jYXzM8EGcbK5b" "6lfxq3CG4xtTiEg7opyCyx" ...
+ $ artists         : chr [1:97980] "Gen Hoshino" "Ben Woodward" "Ingrid Michaelson;ZAYN" "Kina Grannis" ...
+ $ album_name      : chr [1:97980] "Comedy" "Ghost (Acoustic)" "To Begin Again" "Crazy Rich Asians (Original Motion Picture Soundtrack)" ...
+ $ track_name      : chr [1:97980] "Comedy" "Ghost - Acoustic" "To Begin Again" "Can't Help Falling In Love" ...
+ $ popularity      : num [1:97980] 73 55 57 71 82 58 74 80 74 56 ...
+ $ duration_ms     : num [1:97980] 230666 149610 210826 201933 198853 ...
+ $ explicit        : logi [1:97980] FALSE FALSE FALSE FALSE FALSE FALSE ...
+ $ danceability    : num [1:97980] 0.676 0.42 0.438 0.266 0.618 0.688 0.407 0.703 0.625 0.442 ...
+ $ energy          : num [1:97980] 0.461 0.166 0.359 0.0596 0.443 0.481 0.147 0.444 0.414 0.632 ...
+ $ key             : num [1:97980] 1 1 0 0 2 6 2 11 0 1 ...
+ $ loudness        : num [1:97980] -6.75 -17.23 -9.73 -18.52 -9.68 ...
+ $ mode            : num [1:97980] 0 1 1 1 1 1 1 1 1 1 ...
+ $ speechiness     : num [1:97980] 0.143 0.0763 0.0557 0.0363 0.0526 0.105 0.0355 0.0417 0.0369 0.0295 ...
+ $ acousticness    : num [1:97980] 0.0322 0.924 0.21 0.905 0.469 0.289 0.857 0.559 0.294 0.426 ...
+ $ instrumentalness: num [1:97980] 1.01e-06 5.56e-06 0.00 7.07e-05 0.00 0.00 2.89e-06 0.00 0.00 4.19e-03 ...
+ $ liveness        : num [1:97980] 0.358 0.101 0.117 0.132 0.0829 0.189 0.0913 0.0973 0.151 0.0735 ...
+ $ valence         : num [1:97980] 0.715 0.267 0.12 0.143 0.167 0.666 0.0765 0.712 0.669 0.196 ...
+ $ tempo           : num [1:97980] 87.9 77.5 76.3 181.7 119.9 ...
+ $ time_signature  : num [1:97980] 4 4 4 3 4 4 3 4 4 4 ...
+ $ track_genre     : chr [1:97980] "acoustic" "acoustic" "acoustic" "acoustic" ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Also, confirm the number of rows remaining</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(spotify_data_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 97980</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate Q1 (25th percentile) and Q3 (75th percentile) for tempo</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>Q1 <span class="ot">&lt;-</span> <span class="fu">quantile</span>(spotify_data_clean<span class="sc">$</span>tempo, <span class="fl">0.25</span>)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>Q3 <span class="ot">&lt;-</span> <span class="fu">quantile</span>(spotify_data_clean<span class="sc">$</span>tempo, <span class="fl">0.75</span>)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate IQR</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>IQR_value <span class="ot">&lt;-</span> Q3 <span class="sc">-</span> Q1</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Define lower and upper bounds for outliers</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>lower_bound <span class="ot">&lt;-</span> Q1 <span class="sc">-</span> <span class="fl">1.5</span> <span class="sc">*</span> IQR_value</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>upper_bound <span class="ot">&lt;-</span> Q3 <span class="sc">+</span> <span class="fl">1.5</span> <span class="sc">*</span> IQR_value</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter out the rows with outlier values in the 'tempo' column</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>spotify_data_clean <span class="ot">&lt;-</span> spotify_data_clean <span class="sc">%&gt;%</span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(tempo <span class="sc">&gt;=</span> lower_bound <span class="sc">&amp;</span> tempo <span class="sc">&lt;=</span> upper_bound)</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the updated structure and number of rows</span></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(spotify_data_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tibble [97,548 × 20] (S3: tbl_df/tbl/data.frame)
+ $ track_id        : chr [1:97548] "5SuOikwiRyPMVoIQDJUgSV" "4qPNDBW1i3p13qLCt0Ki3A" "1iJBSr7s7jYXzM8EGcbK5b" "6lfxq3CG4xtTiEg7opyCyx" ...
+ $ artists         : chr [1:97548] "Gen Hoshino" "Ben Woodward" "Ingrid Michaelson;ZAYN" "Kina Grannis" ...
+ $ album_name      : chr [1:97548] "Comedy" "Ghost (Acoustic)" "To Begin Again" "Crazy Rich Asians (Original Motion Picture Soundtrack)" ...
+ $ track_name      : chr [1:97548] "Comedy" "Ghost - Acoustic" "To Begin Again" "Can't Help Falling In Love" ...
+ $ popularity      : num [1:97548] 73 55 57 71 82 58 74 80 74 56 ...
+ $ duration_ms     : num [1:97548] 230666 149610 210826 201933 198853 ...
+ $ explicit        : logi [1:97548] FALSE FALSE FALSE FALSE FALSE FALSE ...
+ $ danceability    : num [1:97548] 0.676 0.42 0.438 0.266 0.618 0.688 0.407 0.703 0.625 0.442 ...
+ $ energy          : num [1:97548] 0.461 0.166 0.359 0.0596 0.443 0.481 0.147 0.444 0.414 0.632 ...
+ $ key             : num [1:97548] 1 1 0 0 2 6 2 11 0 1 ...
+ $ loudness        : num [1:97548] -6.75 -17.23 -9.73 -18.52 -9.68 ...
+ $ mode            : num [1:97548] 0 1 1 1 1 1 1 1 1 1 ...
+ $ speechiness     : num [1:97548] 0.143 0.0763 0.0557 0.0363 0.0526 0.105 0.0355 0.0417 0.0369 0.0295 ...
+ $ acousticness    : num [1:97548] 0.0322 0.924 0.21 0.905 0.469 0.289 0.857 0.559 0.294 0.426 ...
+ $ instrumentalness: num [1:97548] 1.01e-06 5.56e-06 0.00 7.07e-05 0.00 0.00 2.89e-06 0.00 0.00 4.19e-03 ...
+ $ liveness        : num [1:97548] 0.358 0.101 0.117 0.132 0.0829 0.189 0.0913 0.0973 0.151 0.0735 ...
+ $ valence         : num [1:97548] 0.715 0.267 0.12 0.143 0.167 0.666 0.0765 0.712 0.669 0.196 ...
+ $ tempo           : num [1:97548] 87.9 77.5 76.3 181.7 119.9 ...
+ $ time_signature  : num [1:97548] 4 4 4 3 4 4 3 4 4 4 ...
+ $ track_genre     : chr [1:97548] "acoustic" "acoustic" "acoustic" "acoustic" ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(spotify_data_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 97548</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot distributions for the relevant features</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(spotify_data_clean, <span class="fu">aes</span>(<span class="at">x =</span> popularity)) <span class="sc">+</span> </span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span> </span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Distribution of Popularity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Spotify_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply square root transformation to Energy (since it's positive)</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>spotify_data_clean<span class="sc">$</span>energy_sqrt <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(spotify_data_clean<span class="sc">$</span>energy)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the distribution of transformed Energy</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(spotify_data_clean, <span class="fu">aes</span>(<span class="at">x =</span> energy_sqrt)) <span class="sc">+</span> </span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="fl">0.05</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span> </span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Distribution of Square Root Transformed Energy"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Spotify_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Min-Max scaling for Loudness</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>min_loudness <span class="ot">&lt;-</span> <span class="fu">min</span>(spotify_data_clean<span class="sc">$</span>loudness)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>max_loudness <span class="ot">&lt;-</span> <span class="fu">max</span>(spotify_data_clean<span class="sc">$</span>loudness)</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply the transformation</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>spotify_data_clean<span class="sc">$</span>loudness_scaled <span class="ot">&lt;-</span> (spotify_data_clean<span class="sc">$</span>loudness <span class="sc">-</span> min_loudness) <span class="sc">/</span> (max_loudness <span class="sc">-</span> min_loudness)</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the distribution of scaled Loudness</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(spotify_data_clean, <span class="fu">aes</span>(<span class="at">x =</span> loudness_scaled)) <span class="sc">+</span> </span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="fl">0.05</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span> </span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Distribution of Scaled Loudness"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Spotify_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the necessary library for cross-validation</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lattice</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'caret'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:purrr':
+
+    lift</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up 10-fold cross-validation</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>train_control <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>, <span class="at">number =</span> <span class="dv">10</span>)</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit a GLM model using the transformed features</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>model_glm <span class="ot">&lt;-</span> <span class="fu">train</span>(popularity <span class="sc">~</span> danceability <span class="sc">+</span> energy_sqrt <span class="sc">+</span> loudness_scaled <span class="sc">+</span> tempo, </span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> spotify_data_clean, </span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">method =</span> <span class="st">"glm"</span>, </span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">trControl =</span> train_control)</span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a><span class="co"># View the results of the cross-validation</span></span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(model_glm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Generalized Linear Model 
+
+97548 samples
+    4 predictor
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 87793, 87793, 87793, 87792, 87793, 87793, ... 
+Resampling results:
+
+  RMSE      Rsquared    MAE     
+  18.98663  0.02362847  15.63392</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if there are any tracks with zero popularity</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>zero_popularity_count <span class="ot">&lt;-</span> <span class="fu">sum</span>(spotify_data_clean<span class="sc">$</span>popularity <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>zero_popularity_count</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create interaction between danceability and energy</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>spotify_data_clean<span class="sc">$</span>danceability_energy_interaction <span class="ot">&lt;-</span> spotify_data_clean<span class="sc">$</span>danceability <span class="sc">*</span> spotify_data_clean<span class="sc">$</span>energy_sqrt</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Bin tempo into low, medium, and high</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>spotify_data_clean<span class="sc">$</span>tempo_binned <span class="ot">&lt;-</span> <span class="fu">cut</span>(spotify_data_clean<span class="sc">$</span>tempo, </span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">breaks =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="dv">90</span>, <span class="dv">130</span>, <span class="cn">Inf</span>), </span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"low"</span>, <span class="st">"medium"</span>, <span class="st">"high"</span>))</span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Bin loudness into low, medium, and high</span></span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>spotify_data_clean<span class="sc">$</span>loudness_binned <span class="ot">&lt;-</span> <span class="fu">cut</span>(spotify_data_clean<span class="sc">$</span>loudness_scaled, </span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">breaks =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="fl">0.3</span>, <span class="fl">0.7</span>, <span class="cn">Inf</span>), </span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"low"</span>, <span class="st">"medium"</span>, <span class="st">"high"</span>))</span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert explicit to binary</span></span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>spotify_data_clean<span class="sc">$</span>explicit_binary <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(spotify_data_clean<span class="sc">$</span>explicit, <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the structure to see new features</span></span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(spotify_data_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tibble [97,548 × 26] (S3: tbl_df/tbl/data.frame)
+ $ track_id                       : chr [1:97548] "5SuOikwiRyPMVoIQDJUgSV" "4qPNDBW1i3p13qLCt0Ki3A" "1iJBSr7s7jYXzM8EGcbK5b" "6lfxq3CG4xtTiEg7opyCyx" ...
+ $ artists                        : chr [1:97548] "Gen Hoshino" "Ben Woodward" "Ingrid Michaelson;ZAYN" "Kina Grannis" ...
+ $ album_name                     : chr [1:97548] "Comedy" "Ghost (Acoustic)" "To Begin Again" "Crazy Rich Asians (Original Motion Picture Soundtrack)" ...
+ $ track_name                     : chr [1:97548] "Comedy" "Ghost - Acoustic" "To Begin Again" "Can't Help Falling In Love" ...
+ $ popularity                     : num [1:97548] 73 55 57 71 82 58 74 80 74 56 ...
+ $ duration_ms                    : num [1:97548] 230666 149610 210826 201933 198853 ...
+ $ explicit                       : logi [1:97548] FALSE FALSE FALSE FALSE FALSE FALSE ...
+ $ danceability                   : num [1:97548] 0.676 0.42 0.438 0.266 0.618 0.688 0.407 0.703 0.625 0.442 ...
+ $ energy                         : num [1:97548] 0.461 0.166 0.359 0.0596 0.443 0.481 0.147 0.444 0.414 0.632 ...
+ $ key                            : num [1:97548] 1 1 0 0 2 6 2 11 0 1 ...
+ $ loudness                       : num [1:97548] -6.75 -17.23 -9.73 -18.52 -9.68 ...
+ $ mode                           : num [1:97548] 0 1 1 1 1 1 1 1 1 1 ...
+ $ speechiness                    : num [1:97548] 0.143 0.0763 0.0557 0.0363 0.0526 0.105 0.0355 0.0417 0.0369 0.0295 ...
+ $ acousticness                   : num [1:97548] 0.0322 0.924 0.21 0.905 0.469 0.289 0.857 0.559 0.294 0.426 ...
+ $ instrumentalness               : num [1:97548] 1.01e-06 5.56e-06 0.00 7.07e-05 0.00 0.00 2.89e-06 0.00 0.00 4.19e-03 ...
+ $ liveness                       : num [1:97548] 0.358 0.101 0.117 0.132 0.0829 0.189 0.0913 0.0973 0.151 0.0735 ...
+ $ valence                        : num [1:97548] 0.715 0.267 0.12 0.143 0.167 0.666 0.0765 0.712 0.669 0.196 ...
+ $ tempo                          : num [1:97548] 87.9 77.5 76.3 181.7 119.9 ...
+ $ time_signature                 : num [1:97548] 4 4 4 3 4 4 3 4 4 4 ...
+ $ track_genre                    : chr [1:97548] "acoustic" "acoustic" "acoustic" "acoustic" ...
+ $ energy_sqrt                    : num [1:97548] 0.679 0.407 0.599 0.244 0.666 ...
+ $ loudness_scaled                : num [1:97548] 0.779 0.574 0.721 0.549 0.722 ...
+ $ danceability_energy_interaction: num [1:97548] 0.459 0.1711 0.2624 0.0649 0.4113 ...
+ $ tempo_binned                   : Factor w/ 3 levels "low","medium",..: 1 1 1 3 2 2 3 3 3 1 ...
+ $ loudness_binned                : Factor w/ 3 levels "low","medium",..: 3 2 3 2 3 3 3 3 3 3 ...
+ $ explicit_binary                : num [1:97548] 0 0 0 0 0 0 0 0 0 0 ...</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit a GLM model using the new engineered features</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>model_glm_new <span class="ot">&lt;-</span> <span class="fu">train</span>(popularity <span class="sc">~</span> danceability <span class="sc">+</span> energy_sqrt <span class="sc">+</span> loudness_scaled <span class="sc">+</span> tempo_binned <span class="sc">+</span> </span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>                       danceability_energy_interaction <span class="sc">+</span> explicit_binary, </span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>                       <span class="at">data =</span> spotify_data_clean, </span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">method =</span> <span class="st">"glm"</span>, </span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>                       <span class="at">trControl =</span> train_control)</span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a><span class="co"># View the results of the cross-validation</span></span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(model_glm_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Generalized Linear Model 
+
+97548 samples
+    6 predictor
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 87794, 87793, 87794, 87793, 87793, 87793, ... 
+Resampling results:
+
+  RMSE      Rsquared   MAE     
+  18.96676  0.0257195  15.63163</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create bins for duration (short, medium, long)</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>spotify_data_clean<span class="sc">$</span>duration_bins <span class="ot">&lt;-</span> <span class="fu">cut</span>(spotify_data_clean<span class="sc">$</span>duration_ms, </span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">breaks =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="dv">180000</span>, <span class="dv">300000</span>, <span class="cn">Inf</span>), </span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"short"</span>, <span class="st">"medium"</span>, <span class="st">"long"</span>))</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Group similar genres (for simplicity, I'm grouping based on acoustic/non-acoustic)</span></span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>spotify_data_clean<span class="sc">$</span>genre_grouped <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">grepl</span>(<span class="st">"acoustic"</span>, spotify_data_clean<span class="sc">$</span>track_genre), <span class="st">"acoustic"</span>, <span class="st">"non_acoustic"</span>)</span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Interaction between valence and energy (how positive and energetic the track is)</span></span>
+<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a>spotify_data_clean<span class="sc">$</span>valence_energy_interaction <span class="ot">&lt;-</span> spotify_data_clean<span class="sc">$</span>valence <span class="sc">*</span> spotify_data_clean<span class="sc">$</span>energy_sqrt</span>
+<span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-12"><a href="#cb54-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the structure to see new features</span></span>
+<span id="cb54-13"><a href="#cb54-13" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(spotify_data_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tibble [97,548 × 29] (S3: tbl_df/tbl/data.frame)
+ $ track_id                       : chr [1:97548] "5SuOikwiRyPMVoIQDJUgSV" "4qPNDBW1i3p13qLCt0Ki3A" "1iJBSr7s7jYXzM8EGcbK5b" "6lfxq3CG4xtTiEg7opyCyx" ...
+ $ artists                        : chr [1:97548] "Gen Hoshino" "Ben Woodward" "Ingrid Michaelson;ZAYN" "Kina Grannis" ...
+ $ album_name                     : chr [1:97548] "Comedy" "Ghost (Acoustic)" "To Begin Again" "Crazy Rich Asians (Original Motion Picture Soundtrack)" ...
+ $ track_name                     : chr [1:97548] "Comedy" "Ghost - Acoustic" "To Begin Again" "Can't Help Falling In Love" ...
+ $ popularity                     : num [1:97548] 73 55 57 71 82 58 74 80 74 56 ...
+ $ duration_ms                    : num [1:97548] 230666 149610 210826 201933 198853 ...
+ $ explicit                       : logi [1:97548] FALSE FALSE FALSE FALSE FALSE FALSE ...
+ $ danceability                   : num [1:97548] 0.676 0.42 0.438 0.266 0.618 0.688 0.407 0.703 0.625 0.442 ...
+ $ energy                         : num [1:97548] 0.461 0.166 0.359 0.0596 0.443 0.481 0.147 0.444 0.414 0.632 ...
+ $ key                            : num [1:97548] 1 1 0 0 2 6 2 11 0 1 ...
+ $ loudness                       : num [1:97548] -6.75 -17.23 -9.73 -18.52 -9.68 ...
+ $ mode                           : num [1:97548] 0 1 1 1 1 1 1 1 1 1 ...
+ $ speechiness                    : num [1:97548] 0.143 0.0763 0.0557 0.0363 0.0526 0.105 0.0355 0.0417 0.0369 0.0295 ...
+ $ acousticness                   : num [1:97548] 0.0322 0.924 0.21 0.905 0.469 0.289 0.857 0.559 0.294 0.426 ...
+ $ instrumentalness               : num [1:97548] 1.01e-06 5.56e-06 0.00 7.07e-05 0.00 0.00 2.89e-06 0.00 0.00 4.19e-03 ...
+ $ liveness                       : num [1:97548] 0.358 0.101 0.117 0.132 0.0829 0.189 0.0913 0.0973 0.151 0.0735 ...
+ $ valence                        : num [1:97548] 0.715 0.267 0.12 0.143 0.167 0.666 0.0765 0.712 0.669 0.196 ...
+ $ tempo                          : num [1:97548] 87.9 77.5 76.3 181.7 119.9 ...
+ $ time_signature                 : num [1:97548] 4 4 4 3 4 4 3 4 4 4 ...
+ $ track_genre                    : chr [1:97548] "acoustic" "acoustic" "acoustic" "acoustic" ...
+ $ energy_sqrt                    : num [1:97548] 0.679 0.407 0.599 0.244 0.666 ...
+ $ loudness_scaled                : num [1:97548] 0.779 0.574 0.721 0.549 0.722 ...
+ $ danceability_energy_interaction: num [1:97548] 0.459 0.1711 0.2624 0.0649 0.4113 ...
+ $ tempo_binned                   : Factor w/ 3 levels "low","medium",..: 1 1 1 3 2 2 3 3 3 1 ...
+ $ loudness_binned                : Factor w/ 3 levels "low","medium",..: 3 2 3 2 3 3 3 3 3 3 ...
+ $ explicit_binary                : num [1:97548] 0 0 0 0 0 0 0 0 0 0 ...
+ $ duration_bins                  : Factor w/ 3 levels "short","medium",..: 2 1 2 2 2 2 2 2 2 2 ...
+ $ genre_grouped                  : chr [1:97548] "acoustic" "acoustic" "acoustic" "acoustic" ...
+ $ valence_energy_interaction     : num [1:97548] 0.4855 0.1088 0.0719 0.0349 0.1112 ...</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit a GLM model using the new engineered features</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>model_glm_advanced <span class="ot">&lt;-</span> <span class="fu">train</span>(popularity <span class="sc">~</span> danceability <span class="sc">+</span> energy_sqrt <span class="sc">+</span> loudness_scaled <span class="sc">+</span> </span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>                            tempo_binned <span class="sc">+</span> danceability_energy_interaction <span class="sc">+</span> explicit_binary <span class="sc">+</span> </span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>                            duration_bins <span class="sc">+</span> genre_grouped <span class="sc">+</span> valence_energy_interaction, </span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">data =</span> spotify_data_clean, </span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>                            <span class="at">method =</span> <span class="st">"glm"</span>, </span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>                            <span class="at">trControl =</span> train_control)</span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a><span class="co"># View the results of the cross-validation</span></span>
+<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(model_glm_advanced)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Generalized Linear Model 
+
+97548 samples
+    9 predictor
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 87794, 87792, 87793, 87793, 87794, 87794, ... 
+Resampling results:
+
+  RMSE      Rsquared    MAE     
+  18.86469  0.03617862  15.50893</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select numeric features and calculate correlation matrix with popularity</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>numeric_features <span class="ot">&lt;-</span> spotify_data_clean <span class="sc">%&gt;%</span></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(popularity, danceability, energy_sqrt, loudness_scaled, valence, tempo)</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Correlation matrix</span></span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>cor_matrix <span class="ot">&lt;-</span> <span class="fu">cor</span>(numeric_features)</span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the correlation matrix</span></span>
+<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(cor_matrix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 popularity danceability energy_sqrt loudness_scaled
+popularity       1.00000000   0.06178403 -0.01745973      0.07270293
+danceability     0.06178403   1.00000000  0.14116401      0.21420659
+energy_sqrt     -0.01745973   0.14116401  1.00000000      0.80571219
+loudness_scaled  0.07270293   0.21420659  0.80571219      1.00000000
+valence         -0.01347303   0.46083138  0.26666253      0.25718723
+tempo           -0.01947287  -0.06808405  0.23710954      0.20728959
+                    valence       tempo
+popularity      -0.01347303 -0.01947287
+danceability     0.46083138 -0.06808405
+energy_sqrt      0.26666253  0.23710954
+loudness_scaled  0.25718723  0.20728959
+valence          1.00000000  0.06469501
+tempo            0.06469501  1.00000000</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># You can visualize it as well</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>corrplot 0.94 loaded</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(cor_matrix, <span class="at">method =</span> <span class="st">"color"</span>, <span class="at">type =</span> <span class="st">"upper"</span>, <span class="at">tl.col =</span> <span class="st">"black"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Spotify_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the randomForest library</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>randomForest 4.7-1.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Type rfNews() to see new features/changes/bug fixes.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'randomForest'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:dplyr':
+
+    combine</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:ggplot2':
+
+    margin</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set seed for reproducibility</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit a Random Forest model</span></span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>model_rf <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(popularity <span class="sc">~</span> danceability <span class="sc">+</span> energy_sqrt <span class="sc">+</span> loudness_scaled <span class="sc">+</span> </span>
+<span id="cb69-6"><a href="#cb69-6" aria-hidden="true" tabindex="-1"></a>                         tempo_binned <span class="sc">+</span> danceability_energy_interaction <span class="sc">+</span> explicit_binary <span class="sc">+</span> </span>
+<span id="cb69-7"><a href="#cb69-7" aria-hidden="true" tabindex="-1"></a>                         duration_bins <span class="sc">+</span> genre_grouped <span class="sc">+</span> valence_energy_interaction, </span>
+<span id="cb69-8"><a href="#cb69-8" aria-hidden="true" tabindex="-1"></a>                         <span class="at">data =</span> spotify_data_clean, <span class="at">importance =</span> <span class="cn">TRUE</span>, <span class="at">ntree =</span> <span class="dv">500</span>)</span>
+<span id="cb69-9"><a href="#cb69-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-10"><a href="#cb69-10" aria-hidden="true" tabindex="-1"></a><span class="co"># View model summary</span></span>
+<span id="cb69-11"><a href="#cb69-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(model_rf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+ randomForest(formula = popularity ~ danceability + energy_sqrt +      loudness_scaled + tempo_binned + danceability_energy_interaction +      explicit_binary + duration_bins + genre_grouped + valence_energy_interaction,      data = spotify_data_clean, importance = TRUE, ntree = 500) 
+               Type of random forest: regression
+                     Number of trees: 500
+No. of variables tried at each split: 3
+
+          Mean of squared residuals: 212.8293
+                    % Var explained: 42.35</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="co"># View variable importance</span></span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a><span class="fu">importance</span>(model_rf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                  %IncMSE IncNodePurity
+danceability                    216.01207    5152043.63
+energy_sqrt                     289.44561    5673113.86
+loudness_scaled                 328.72331    6247020.82
+tempo_binned                    175.51220     989918.59
+danceability_energy_interaction 221.92401    5630086.50
+explicit_binary                 109.89908     357231.54
+duration_bins                   157.66038     881090.46
+genre_grouped                    55.19515      74684.63
+valence_energy_interaction      287.14384    5853943.44</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot variable importance</span></span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a><span class="fu">varImpPlot</span>(model_rf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Spotify_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

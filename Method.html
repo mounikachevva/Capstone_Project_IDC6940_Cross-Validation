@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.555">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Hooman Sabarou">
+<meta name="dcterms.date" content="2024-10-20">
+
+<title>Methodology</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="Method_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Method_files/libs/quarto-html/quarto.js"></script>
+<script src="Method_files/libs/quarto-html/popper.min.js"></script>
+<script src="Method_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Method_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Method_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Method_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Method_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Method_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Method_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Methodology</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Hooman Sabarou </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 20, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="methodology" class="level2">
+<h2 class="anchored" data-anchor-id="methodology">Methodology</h2>
+<p>In this section, the method to evaluate the dataset (Martensite) and choose the final models are explained. To have a strong model, some background knowledge in materials science has been applied.</p>
+</section>
+<section id="martensite-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="martensite-dataset">Martensite Dataset</h2>
+<p>The initial Martensite dataset has 1543 observations with 16 variables. The dataset collects Martensite starting temperatures for different steels, based on their compositions. Those 16 variables represent 16 different chemical elements. The dependent variable is Ms (Martesnite Starting Temperature).</p>
+<section id="filtering-the-dataset" class="level4">
+<h4 class="anchored" data-anchor-id="filtering-the-dataset">Filtering the Dataset</h4>
+<p>After evaluating the dataset, it has been observed that the most of the data for MS has been collected between 300 to 800C as they are only few datapoints between 150 to 300C. This structure of the dataset makes it difficult to model correlations between Ms and its predictors. Indeed, few points between 150 to 300C can act as extreme values and outliers, leading to inaccurate coefficients and distorted relationships between predictors and the response variable (Ms). Also, keeping extreme values in the dataset could have led to non-normally distributed residuals and poor model fits. Accordingly, the initial dataset has been filtered to only focus on the central range of Ms values (300 to 800C).</p>
+<p>In addition to limiting the range of Ms, another modification has been applied to the dataset before modeling. It has been revealed that the dataset has some values of Ms while their corresponding Carbon contents are zero. As there is no steel without Carbon, cells with zero Carbon have no sense. These cells have been deleted from the dataset.</p>
+<p>After conducting these two modifications into the initial dataset, the modeling has been started based on GLM models.</p>
+</section>
+</section>
+<section id="models" class="level2">
+<h2 class="anchored" data-anchor-id="models">Models</h2>
+<p>Initial choice of predictor variables has been done based on previous knowledge in materials science. No interaction parameter has been considered in initial models. The model starts with a linear model as it follows:</p>
+<p><span class="math inline">\(Ms = C + Ni + Mn + Mo + Si + Cr + V + Co\)</span></p>
+<p>The significance of predictor variables has been firstly evaluated by p-value as p-value &lt; 0.05 indicates a predictor is statistically significant. In this step, Vanadium (V) and Cobalt (Co) have been removed from the model. They also showed multicollinearity, which made it difficult to interpret the model later. Removing V and Co could reduce AIC for the model.</p>
+<p>The improvement in models has been evaluated by monitoring residual deviances and AICs. Moreover, residual vs.&nbsp;fitted plot and Q-Q plots of residuals have been evaluated for models.</p>
+<p>For further improvement, interaction parameters have been introduced for the most important predictors. Accordingly, in addition to C, Mn, and Ni as individual predictors, the interaction parameters of C-Mn and C-Ni have been added to the model.</p>
+<p>Leverage and influential datapoints have been evaluated by Cook’s distance. In this regard, three influential datapoints have been investigated: data point #1145, 718, and 719. It is revealed that these points represent extreme content of either Carbon or Manganese. They have been removed from the dataset, and model has been updated. This step has caused a great improvement in the models.</p>
+<p>Further improvement has been achieved by considering a log model. Accordingly, two different models have been developed to capture correlations between Ms and chemical elements. As it mentioned earlier, the first model is a linear model (untransformed model), and the second model is a log-transformed model. In the former, the dependent variable is Ms.&nbsp;In the later, the dependent variable is log (Ms). The final models have been presented as follows after checking multicollinearity among predictor variables for each model.</p>
+<section id="linear-model-untransformed-model" class="level3">
+<h3 class="anchored" data-anchor-id="linear-model-untransformed-model">Linear Model (untransformed model)</h3>
+<p>The dependent variable is the <strong>Martensite Starting Temperature (Ms)</strong>, and It is directly modeled without any transformations. This model assumes a&nbsp;<strong>linear relationship</strong>&nbsp;between the chemical elements (such as&nbsp;<strong>C</strong>,&nbsp;<strong>Mn</strong>,&nbsp;<strong>Ni</strong>,&nbsp;<strong>Si</strong>,&nbsp;<strong>Cr</strong>) and&nbsp;<strong>Ms</strong>.</p>
+<p><span class="math inline">\(Ms = 769.41 -286.71 C -16.42 Mn -14.04 Ni - 13.89 Si - 10.13Cr -41.45C:Mn - 8.36 C:Ni\)</span></p>
+<p>As it can be see, the model has composed of two interaction parameters between Carbon and Manganese and Carbon and Nickle.</p>
+<p>The interpretation of the linear model can be done as follows:</p>
+<ul>
+<li><p>The coefficients represent the direct change in the Martensite start temperature (<strong>Ms</strong>) for a one-unit change in the predictor variable, holding all other variables constant.</p></li>
+<li><p>For example, a coefficient of&nbsp;<strong>-286.71</strong>&nbsp;for&nbsp;<strong>C</strong>&nbsp;means that for every 1% increase in carbon,&nbsp;<strong>Ms</strong>&nbsp;decreases by 286.71°C.</p></li>
+<li><p><strong>Interaction Terms</strong>: The interaction between&nbsp;<strong>C</strong>&nbsp;and&nbsp;<strong>Mn</strong>&nbsp;indicates that the effect of&nbsp;<strong>C</strong>&nbsp;on&nbsp;<strong>Ms</strong>&nbsp;depends on the level of&nbsp;<strong>Mn</strong>&nbsp;and vice versa.</p></li>
+</ul>
+</section>
+<section id="log-model-transformed-model" class="level3">
+<h3 class="anchored" data-anchor-id="log-model-transformed-model">Log Model (transformed model)</h3>
+<p>In this model, the dependent variable is <strong>log(Ms)</strong>. The log transformation is applied to stabilize variance and address potential skewness in the response variable. The model assumes a <strong>linear relationship</strong> between the predictors and the log-transformed response.</p>
+<p><span class="math inline">\(log(Ms) = -6.69 - 0.51C - 0.03 Mn - 0.03 Ni - 0.03 Si - 0.02Cr - 0.07 C:Mn - 0.01C:Ni\)</span></p>
+<p>The interpretation of the log model can be done as follows:</p>
+<ul>
+<li><p>In the log-transformed model, the coefficients represent the&nbsp;<strong>percentage change</strong>&nbsp;in&nbsp;<strong>Ms</strong>&nbsp;for a one-unit change in the predictor. Since the dependent variable is on a logarithmic scale, the coefficients can be interpreted as follows:</p>
+<ul>
+<li>A coefficient of&nbsp;<strong>-0.51</strong>&nbsp;for&nbsp;<strong>C</strong>&nbsp;means that for a 1% increase in carbon,&nbsp;<strong>Ms</strong>&nbsp;decreases by about&nbsp;<strong>40%</strong>&nbsp;(since <span class="math inline">\(e^{0.51} = 0.60\)</span>).</li>
+</ul></li>
+<li><p><strong>Interaction Terms</strong>: The interaction terms in this model indicate how the combination of variables affects the percentage change in&nbsp;<strong>Ms</strong>.</p></li>
+</ul>
+</section>
+<section id="choosing-between-models" class="level3">
+<h3 class="anchored" data-anchor-id="choosing-between-models">Choosing Between Models</h3>
+<p>Cross-validation has been performed for each model based on k-fold (5-fold) method. The results have been considered to choose the best model.</p>
+<ul>
+<li><p><strong>Untransformed Model</strong>: This model was chosen to first understand the&nbsp;<strong>direct linear relationship</strong>&nbsp;between the chemical elements and&nbsp;<strong>Ms</strong>. It allows for easy interpretation and insight into how each chemical composition influences the Martensite start temperature.</p></li>
+<li><p><strong>Log-Transformed Model</strong>: This model was chosen because it addressed several issues observed in the untransformed model:</p>
+<ul>
+<li><p><strong>Non-normality of residuals</strong>: Residuals in the untransformed model were not normally distributed, violating a key assumption of linear regression.</p></li>
+<li><p><strong>Heteroscedasticity</strong>: The untransformed model showed non-constant variance in the residuals. The log transformation stabilized this.</p></li>
+<li><p>The log model provided a better fit based on residual deviance and cross-validation error.</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="the-best-model" class="level3">
+<h3 class="anchored" data-anchor-id="the-best-model">The Best Model</h3>
+<p>Based on the cross-validation results and model diagnostics (such as residual deviance, AIC, and MSE), the&nbsp;<strong>log-transformed model</strong>&nbsp;is the best-performing model.</p>
+<ul>
+<li><p><strong>Log Model’s AIC</strong>:&nbsp;<strong>-4756.5</strong>, which is significantly lower than the untransformed model’s AIC of&nbsp;<strong>13545</strong>.</p></li>
+<li><p><strong>Residual Deviance</strong>: The log-transformed model’s residual deviance is much lower, showing a better fit to the data.</p></li>
+<li><p><strong>Cross-validation MSE</strong>: The log-transformed model had a much lower MSE (around&nbsp;<strong>0.0021</strong>) compared to the untransformed model (around&nbsp;<strong>774</strong>), indicating better generalization performance.</p></li>
+<li><p><strong>Stabilization of variance</strong>: The log transformation handled issues like heteroscedasticity and non-normality of residuals, making it more reliable.</p></li>
+</ul>
+</section>
+<section id="cross-validation-refinement" class="level3">
+<h3 class="anchored" data-anchor-id="cross-validation-refinement"><strong>Cross-Validation Refinement</strong>:</h3>
+<ul>
+<li><p><strong>K-Fold Cross-Validation with More Folds</strong>: increasing the number of folds (e.g., 10-fold) may provide a more robust estimate of the model’s generalization performance.</p></li>
+<li><p><strong>Leave-One-Out Cross-Validation (LOOCV)</strong>: A more granular approach to cross-validation that can further help us validate the model’s performance.</p></li>
+</ul>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,587 @@
+---
+title: "Spotify-EV-HS"
+format: html
+editor: visual
+---
+
+```{r}
+
+library(readr)
+library(classpackage)
+library(ggplot2)
+library(purrr)
+library(tidyr)
+library(dplyr)
+
+
+spotify_data <- read_csv("/Users/hoomansabarou/Github/Capstone_Project_Rstudio/Choosing Dataset/Spotify/Spotify Track Dataset.csv")
+
+head(spotify_data)
+
+```
+
+```{r}
+# Load the dataset and suppress the column type messages
+spotify_data <- read_csv("/Users/hoomansabarou/Github/Capstone_Project_Rstudio/Choosing Dataset/Spotify/Spotify Track Dataset.csv", show_col_types = FALSE)
+
+# Drop the `...1` column as it seems unnecessary
+spotify_data <- spotify_data[ , -1]
+
+# View the structure again to confirm the changes
+str(spotify_data)
+
+
+```
+
+```{r}
+# Check for missing values across the dataset
+colSums(is.na(spotify_data))
+
+```
+
+```{r}
+# Remove rows with missing values in the specific columns
+spotify_data_clean <- spotify_data %>%
+  drop_na(artists, album_name, track_name)
+
+# Check the dataset structure again to confirm
+str(spotify_data_clean)
+
+```
+
+```{r}
+# Load necessary libraries for visualization and correlation
+library(GGally)
+
+# Select the relevant columns for correlation analysis
+spotify_subset <- spotify_data_clean %>%
+  select(popularity, danceability, energy, loudness, tempo)
+
+# Plot the correlation matrix
+ggpairs(spotify_subset)
+
+```
+
+```{r}
+
+
+# Plot distributions for the relevant features
+ggplot(spotify_data_clean, aes(x = popularity)) + 
+  geom_histogram(binwidth = 1, fill = "skyblue", color = "black") + 
+  ggtitle("Distribution of Popularity")
+
+ggplot(spotify_data_clean, aes(x = danceability)) + 
+  geom_histogram(binwidth = 0.05, fill = "skyblue", color = "black") + 
+  ggtitle("Distribution of Danceability")
+
+ggplot(spotify_data_clean, aes(x = energy)) + 
+  geom_histogram(binwidth = 0.05, fill = "skyblue", color = "black") + 
+  ggtitle("Distribution of Energy")
+
+ggplot(spotify_data_clean, aes(x = loudness)) + 
+  geom_histogram(binwidth = 1, fill = "skyblue", color = "black") + 
+  ggtitle("Distribution of Loudness")
+
+ggplot(spotify_data_clean, aes(x = tempo)) + 
+  geom_histogram(binwidth = 5, fill = "skyblue", color = "black") + 
+  ggtitle("Distribution of Tempo")
+
+```
+
+```{r}
+
+# Remove rows where popularity is zero
+spotify_data_clean <- spotify_data_clean %>%
+  filter(popularity > 0)
+
+# Check the updated structure of the dataset
+str(spotify_data_clean)
+
+# Also, confirm the number of rows remaining
+nrow(spotify_data_clean)
+
+```
+
+```{r}
+# Calculate Q1 (25th percentile) and Q3 (75th percentile) for tempo
+Q1 <- quantile(spotify_data_clean$tempo, 0.25)
+Q3 <- quantile(spotify_data_clean$tempo, 0.75)
+
+# Calculate IQR
+IQR_value <- Q3 - Q1
+
+# Define lower and upper bounds for outliers
+lower_bound <- Q1 - 1.5 * IQR_value
+upper_bound <- Q3 + 1.5 * IQR_value
+
+# Filter out the rows with outlier values in the 'tempo' column
+spotify_data_clean <- spotify_data_clean %>%
+  filter(tempo >= lower_bound & tempo <= upper_bound)
+
+# Check the updated structure and number of rows
+str(spotify_data_clean)
+nrow(spotify_data_clean)
+
+```
+
+```{r}
+# Plot distributions for the relevant features
+ggplot(spotify_data_clean, aes(x = popularity)) + 
+  geom_histogram(binwidth = 1, fill = "skyblue", color = "black") + 
+  ggtitle("Distribution of Popularity")
+```
+
+```{r}
+# Apply square root transformation to Energy (since it's positive)
+spotify_data_clean$energy_sqrt <- sqrt(spotify_data_clean$energy)
+
+# Check the distribution of transformed Energy
+ggplot(spotify_data_clean, aes(x = energy_sqrt)) + 
+  geom_histogram(binwidth = 0.05, fill = "skyblue", color = "black") + 
+  ggtitle("Distribution of Square Root Transformed Energy")
+
+```
+
+```{r}
+# Min-Max scaling for Loudness
+min_loudness <- min(spotify_data_clean$loudness)
+max_loudness <- max(spotify_data_clean$loudness)
+
+# Apply the transformation
+spotify_data_clean$loudness_scaled <- (spotify_data_clean$loudness - min_loudness) / (max_loudness - min_loudness)
+
+# Check the distribution of scaled Loudness
+ggplot(spotify_data_clean, aes(x = loudness_scaled)) + 
+  geom_histogram(binwidth = 0.05, fill = "skyblue", color = "black") + 
+  ggtitle("Distribution of Scaled Loudness")
+
+```
+
+```{r}
+# Load the necessary library for cross-validation
+library(caret)
+
+# Set up 10-fold cross-validation
+set.seed(123)
+train_control <- trainControl(method = "cv", number = 10)
+
+# Fit a GLM model using the transformed features
+model_glm <- train(popularity ~ danceability + energy_sqrt + loudness_scaled + tempo, 
+                   data = spotify_data_clean, 
+                   method = "glm", 
+                   trControl = train_control)
+
+# View the results of the cross-validation
+print(model_glm)
+
+```
+
+```{r}
+# Check if there are any tracks with zero popularity
+zero_popularity_count <- sum(spotify_data_clean$popularity == 0)
+zero_popularity_count
+
+
+```
+
+```{r}
+# Create interaction between danceability and energy
+spotify_data_clean$danceability_energy_interaction <- spotify_data_clean$danceability * spotify_data_clean$energy_sqrt
+
+# Bin tempo into low, medium, and high
+spotify_data_clean$tempo_binned <- cut(spotify_data_clean$tempo, 
+                                       breaks = c(-Inf, 90, 130, Inf), 
+                                       labels = c("low", "medium", "high"))
+
+# Bin loudness into low, medium, and high
+spotify_data_clean$loudness_binned <- cut(spotify_data_clean$loudness_scaled, 
+                                          breaks = c(-Inf, 0.3, 0.7, Inf), 
+                                          labels = c("low", "medium", "high"))
+
+# Convert explicit to binary
+spotify_data_clean$explicit_binary <- ifelse(spotify_data_clean$explicit, 1, 0)
+
+# Check the structure to see new features
+str(spotify_data_clean)
+
+```
+
+```{r}
+# Fit a GLM model using the new engineered features
+model_glm_new <- train(popularity ~ danceability + energy_sqrt + loudness_scaled + tempo_binned + 
+                       danceability_energy_interaction + explicit_binary, 
+                       data = spotify_data_clean, 
+                       method = "glm", 
+                       trControl = train_control)
+
+# View the results of the cross-validation
+print(model_glm_new)
+
+```
+
+```{r}
+# Create bins for duration (short, medium, long)
+spotify_data_clean$duration_bins <- cut(spotify_data_clean$duration_ms, 
+                                        breaks = c(-Inf, 180000, 300000, Inf), 
+                                        labels = c("short", "medium", "long"))
+
+# Group similar genres (for simplicity, I'm grouping based on acoustic/non-acoustic)
+spotify_data_clean$genre_grouped <- ifelse(grepl("acoustic", spotify_data_clean$track_genre), "acoustic", "non_acoustic")
+
+# Interaction between valence and energy (how positive and energetic the track is)
+spotify_data_clean$valence_energy_interaction <- spotify_data_clean$valence * spotify_data_clean$energy_sqrt
+
+# Check the structure to see new features
+str(spotify_data_clean)
+
+```
+
+```{r}
+# Fit a GLM model using the new engineered features
+model_glm_advanced <- train(popularity ~ danceability + energy_sqrt + loudness_scaled + 
+                            tempo_binned + danceability_energy_interaction + explicit_binary + 
+                            duration_bins + genre_grouped + valence_energy_interaction, 
+                            data = spotify_data_clean, 
+                            method = "glm", 
+                            trControl = train_control)
+
+# View the results of the cross-validation
+print(model_glm_advanced)
+
+```
+
+```{r}
+# Select numeric features and calculate correlation matrix with popularity
+numeric_features <- spotify_data_clean %>%
+  select(popularity, danceability, energy_sqrt, loudness_scaled, valence, tempo)
+
+# Correlation matrix
+cor_matrix <- cor(numeric_features)
+
+# Print the correlation matrix
+print(cor_matrix)
+
+# You can visualize it as well
+library(corrplot)
+corrplot(cor_matrix, method = "color", type = "upper", tl.col = "black")
+
+```
+
+```{r}
+# Load the randomForest library
+library(randomForest)
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Fit a Random Forest model
+model_rf <- randomForest(popularity ~ danceability + energy_sqrt + loudness_scaled + 
+                         tempo_binned + danceability_energy_interaction + explicit_binary + 
+                         duration_bins + genre_grouped + valence_energy_interaction, 
+                         data = spotify_data_clean, importance = TRUE, ntree = 500)
+
+# View model summary
+print(model_rf)
+
+# View variable importance
+importance(model_rf)
+
+# Plot variable importance
+varImpPlot(model_rf)
+
+```
+
+```{r}
+# Load the ggplot2 library for visualization
+library(ggplot2)
+
+# Plot the distribution of track_genre
+ggplot(spotify_data_clean, aes(x = track_genre)) +
+  geom_bar(fill = "steelblue", color = "black") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + # Rotate x-axis labels
+  ggtitle("Distribution of Track Genres") +
+  xlab("Track Genre") +
+  ylab("Count of Tracks")
+
+```
+
+```{r}
+# View the unique genres in the track_genre column
+unique_genres <- unique(spotify_data_clean$track_genre)
+
+# Print the unique genres
+print(unique_genres)
+
+```
+
+```{r}
+# Load necessary library
+library(caret)
+
+# Split the data into training and test sets (80% train, 20% test)
+set.seed(123)
+trainIndex <- createDataPartition(spotify_data_clean$danceability, p = .8, 
+                                  list = FALSE, 
+                                  times = 1)
+
+spotify_train <- spotify_data_clean[trainIndex,]
+spotify_test <- spotify_data_clean[-trainIndex,]
+
+```
+
+```{r}
+# Fit a simple linear regression model to predict danceability
+model_lm <- train(danceability ~ energy_sqrt + loudness_scaled + tempo + valence, 
+                  data = spotify_train, 
+                  method = "lm")
+
+# View the model summary
+summary(model_lm)
+
+```
+
+```{r}
+# Predict on the test data
+predictions <- predict(model_lm, newdata = spotify_test)
+
+# Calculate performance metrics (RMSE, R-squared, MAE)
+postResample(predictions, spotify_test$danceability)
+
+```
+
+```{r}
+# Convert track_genre to a factor (categorical) variable
+spotify_data_clean$track_genre <- as.factor(spotify_data_clean$track_genre)
+
+# Check the structure to ensure track_genre is a factor
+str(spotify_data_clean)
+
+```
+
+```{r}
+# Fit a linear regression model with track_genre added as a predictor
+model_lm_genre <- train(danceability ~ energy_sqrt + loudness_scaled + tempo + valence + track_genre, 
+                        data = spotify_train, 
+                        method = "lm")
+
+# View the model summary
+summary(model_lm_genre)
+
+```
+
+```{r}
+# Predict on the test data
+predictions_genre <- predict(model_lm_genre, newdata = spotify_test)
+
+# Calculate performance metrics (RMSE, R-squared, MAE)
+postResample(predictions_genre, spotify_test$danceability)
+
+```
+
+```{r}
+# Extract coefficients from the linear model
+coefficients <- coef(model_lm_genre$finalModel)
+
+# Print the coefficients to see feature importance
+print(coefficients)
+
+```
+
+```{r}
+# Load the randomForest library (if not already loaded)
+library(randomForest)
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Fit a Random Forest model to predict danceability
+model_rf <- randomForest(danceability ~ energy_sqrt + loudness_scaled + tempo + valence + track_genre, 
+                         data = spotify_train, importance = TRUE, ntree = 500)
+
+# Get variable importance
+importance(model_rf)
+
+# Plot variable importance
+varImpPlot(model_rf)
+
+```
+
+```{r}
+# Fit a linear regression model without loudness_scaled
+model_lm_no_loudness <- train(danceability ~ energy_sqrt + tempo + valence + track_genre, 
+                              data = spotify_train, 
+                              method = "lm")
+
+# View the model summary
+summary(model_lm_no_loudness)
+
+# Predict on the test data
+predictions_no_loudness <- predict(model_lm_no_loudness, newdata = spotify_test)
+
+# Calculate performance metrics (RMSE, R-squared, MAE)
+postResample(predictions_no_loudness, spotify_test$danceability)
+
+```
+
+```{r}
+# Fit a Random Forest model without loudness_scaled
+set.seed(123)
+model_rf_no_loudness <- randomForest(danceability ~ energy_sqrt + tempo + valence + track_genre, 
+                                     data = spotify_train, importance = TRUE, ntree = 500)
+
+# View the updated variable importance
+importance(model_rf_no_loudness)
+
+# Plot the updated variable importance
+varImpPlot(model_rf_no_loudness)
+
+# Predict on the test data
+predictions_rf_no_loudness <- predict(model_rf_no_loudness, newdata = spotify_test)
+
+# Calculate performance metrics for Random Forest
+postResample(predictions_rf_no_loudness, spotify_test$danceability)
+
+```
+
+```{r}
+# Fit a linear regression model with interaction terms
+model_lm_interactions <- train(danceability ~ energy_sqrt * tempo * valence + track_genre, 
+                               data = spotify_train, 
+                               method = "lm")
+
+# View the model summary
+summary(model_lm_interactions)
+
+# Predict on the test data
+predictions_interactions <- predict(model_lm_interactions, newdata = spotify_test)
+
+# Calculate performance metrics
+postResample(predictions_interactions, spotify_test$danceability)
+
+```
+
+```{r}
+# Fit a Random Forest model with interaction terms
+set.seed(123)
+model_rf_interactions <- randomForest(danceability ~ energy_sqrt * tempo * valence + track_genre, 
+                                      data = spotify_train, importance = TRUE, ntree = 500)
+
+# View variable importance
+importance(model_rf_interactions)
+
+# Plot variable importance
+varImpPlot(model_rf_interactions)
+
+# Predict on the test data
+predictions_rf_interactions <- predict(model_rf_interactions, newdata = spotify_test)
+
+# Calculate performance metrics
+postResample(predictions_rf_interactions, spotify_test$danceability)
+
+```
+
+```{r}
+# Fit a Random Forest model with liveness added
+set.seed(123)
+model_rf_liveness <- randomForest(danceability ~ energy_sqrt + tempo + valence + 
+                                  track_genre + liveness, 
+                                  data = spotify_train, importance = TRUE, ntree = 500)
+
+# View variable importance
+importance(model_rf_liveness)
+
+# Plot variable importance
+varImpPlot(model_rf_liveness)
+
+# Predict on the test data
+predictions_rf_liveness <- predict(model_rf_liveness, newdata = spotify_test)
+
+# Calculate performance metrics
+postResample(predictions_rf_liveness, spotify_test$danceability)
+
+```
+
+```{r}
+# Fit a Random Forest model with instrumentalness added, and liveness removed
+set.seed(123)
+model_rf_instrumentalness <- randomForest(danceability ~ energy_sqrt + tempo + valence + 
+                                          track_genre + instrumentalness, 
+                                          data = spotify_train, importance = TRUE, ntree = 500)
+
+# View variable importance
+importance(model_rf_instrumentalness)
+
+# Plot variable importance
+varImpPlot(model_rf_instrumentalness)
+
+# Predict on the test data
+predictions_rf_instrumentalness <- predict(model_rf_instrumentalness, newdata = spotify_test)
+
+# Calculate performance metrics
+postResample(predictions_rf_instrumentalness, spotify_test$danceability)
+
+```
+
+```{r}
+# Load necessary libraries
+library(caret)
+
+# Fit a GLM model with instrumentalness, tempo, valence, energy_sqrt, and track_genre
+model_glm_instrumentalness <- train(danceability ~ energy_sqrt + tempo + valence + 
+                                    track_genre + instrumentalness, 
+                                    data = spotify_train, 
+                                    method = "glm")
+
+# View the model summary
+summary(model_glm_instrumentalness)
+
+# Predict on the test data
+predictions_glm_instrumentalness <- predict(model_glm_instrumentalness, newdata = spotify_test)
+
+# Calculate performance metrics
+postResample(predictions_glm_instrumentalness, spotify_test$danceability)
+
+```
+
+```{r}
+# Fit a Random Forest model with acousticness added, and instrumentalness removed
+set.seed(123)
+model_rf_acousticness <- randomForest(danceability ~ energy_sqrt + tempo + valence + 
+                                      track_genre + acousticness, 
+                                      data = spotify_train, importance = TRUE, ntree = 500)
+
+# View variable importance
+importance(model_rf_acousticness)
+
+# Plot variable importance
+varImpPlot(model_rf_acousticness)
+
+# Predict on the test data
+predictions_rf_acousticness <- predict(model_rf_acousticness, newdata = spotify_test)
+
+# Calculate performance metrics
+postResample(predictions_rf_acousticness, spotify_test$danceability)
+
+
+```
+
+```{r}
+# Fit a Random Forest model with time_signature added
+set.seed(123)
+model_rf_time_signature <- randomForest(danceability ~ energy_sqrt + tempo + valence + 
+                                        track_genre + acousticness + time_signature, 
+                                        data = spotify_train, importance = TRUE, ntree = 500)
+
+# View variable importance
+importance(model_rf_time_signature)
+
+# Plot variable importance
+varImpPlot(model_rf_time_signature)
+
+# Predict on the test data
+predictions_rf_time_signature <- predict(model_rf_time_signature, newdata = spotify_test)
+
+# Calculate performance metrics
+postResample(predictions_rf_time_signature, spotify_test$danceability)
+ 
+```

@@ -1,0 +1,68 @@
+---
+title: "Cross-Validation"
+subtitle: "Hooman Sabarou & Mounika Chevva (Advisor: Dr. Seals)"
+author: "Literature Review-Fall 2024"
+execute:
+  echo: true
+  warning: false
+  message: false
+  error: false
+format: 
+  revealjs:
+    theme: sky
+    embed-resources: true
+    slide-number: false
+    width: 1600
+    height: 900
+    df-print: paged
+    html-math-method: katex
+    bibliography: references.bib 
+    csl: ieee.csl    
+editor: source
+pdf-separate-fragments: true
+fig-align: center
+---
+
+
+## Introduction  {.smaller}
+
+- **Challenges in Cross-Validation:** Traditional methods like k-fold and leave-one-out cross-validation face limitations like overfitting, variance, and inefficiency in large datasets. 
+- **Innovative Solutions:** New techniques such as Cross-Validation Voting (CVV), Monte Carlo cross-validation (MCCV), and improved methods for selecting the right number of components (Wold, EK procedures) enhance model generalization, reduce overfitting, and improve error rate estimation.
+- **Performance and Efficiency:** Leveraging advanced methods like Parallel-CV and GPU-based parallelization, as well as alternative cross-validation approaches in multivariate models, significantly boosts efficiency and accuracy, especially for large or small datasets.
+
+
+## Literature Review {.smaller}
+
+- CNN models face challenges like overfitting and generalization issues in supermarket product classification.[@domingo2022cross]
+- Ensemble learning strategies such as voting, boosting, and bagging are commonly used to improve performance but often rely on single classifiers or validation sets.
+- The Cross-Validation Voting (CVV) method proposed by Duque Domingo et al. improves generalization and reduces overfitting, outperforming traditional methods in grocery classification.[@yates2023cross],[@qi2019estimating],[ @6322811]
+
+## Literature Review {.smaller}
+
+- Overview of Cross-Validation Methods: The paper covers data splitting techniques, including single hold-out, k-fold, and leave-one-out cross-validation. [@Berrar2019-gy]
+- Pros and Cons: Each method's advantages and limitations are discussed in relation to dataset size and complexity.
+- Key Concepts: The paper addresses overfitting, stratification, and how to select the final model based on cross-validation results. [@Wentzien2024-in][@xu2001]
+
+
+## Literature Review {.smaller}
+
+- Focus on Model Generalizability: The paper highlights the issue of overfitting in statistical models and their poor performance on new data. [@song2021]
+- Cross-Validation Techniques: It introduces k-fold and Monte Carlo cross-validation as methods to assess and improve generalizability, with practical implementation in R using the caret package.
+- Interactive Example: A hands-on Shiny app example illustrates how factors like model complexity, sample size, and effect size impact generalizability.
+
+## Literature Review {.smaller}
+
+- Cross-Validation in PCA: The paper examines how cross-validation techniques help select the correct number of components in principal component analysis (PCA) to avoid overfitting and improve prediction accuracy.[@bro2008]
+- Alternative Methods: It introduces the improved Wold and Eastment–Krzanowski (EK) procedures to address overfitting and bias in component models.
+- Performance of Methods: The study finds that the Eigenvector and EM methods outperform others, particularly for smaller datasets, emphasizing the importance of choosing the right cross-validation method based on dataset size and complexity.
+
+
+## Conclusion & Future Work
+
+- In summary, cross-validation techniques are essential for improving model generalization and reducing overfitting, but traditional methods often struggle with limitations such as high variance and inefficiency. New approaches like CVV, MCCV, and improved component selection methods provide more reliable results, especially for complex datasets. By incorporating parallel processing and advanced techniques, these methods greatly enhance the accuracy and efficiency of model validation across various fields.
+
+## References
+
+
+
+
